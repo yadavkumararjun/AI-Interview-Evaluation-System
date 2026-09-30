@@ -1,0 +1,419 @@
+[
+  {
+    "question_id": "INT001",
+    "stage": "introduction",
+    "type": "behavioral",
+    "category": "Introduction",
+    "question": "Tell me about yourself.",
+    "difficulty": "easy",
+    "evaluation_type": "communication",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "INT002",
+    "stage": "introduction",
+    "type": "behavioral",
+    "category": "Introduction",
+    "question": "Can you briefly introduce yourself and describe what you are currently working on?",
+    "difficulty": "easy",
+    "evaluation_type": "communication",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "INT003",
+    "stage": "introduction",
+    "type": "behavioral",
+    "category": "Introduction",
+    "question": "How would you describe yourself as a student and as a future software engineer?",
+    "difficulty": "easy",
+    "evaluation_type": "communication",
+    "follow_up_enabled": true
+  },
+
+  {
+    "question_id": "BG001",
+    "stage": "background",
+    "type": "behavioral",
+    "category": "Education",
+    "question": "Tell me about your educational background.",
+    "difficulty": "easy",
+    "evaluation_type": "background",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BG002",
+    "stage": "background",
+    "type": "behavioral",
+    "category": "Career",
+    "question": "Why did you choose Computer Engineering?",
+    "difficulty": "easy",
+    "evaluation_type": "background",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BG003",
+    "stage": "background",
+    "type": "behavioral",
+    "category": "Learning",
+    "question": "What technologies or programming languages have you learned so far?",
+    "difficulty": "easy",
+    "evaluation_type": "background",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BG004",
+    "stage": "background",
+    "type": "behavioral",
+    "category": "Interests",
+    "question": "Which area of software development interests you the most, and why?",
+    "difficulty": "medium",
+    "evaluation_type": "background",
+    "follow_up_enabled": true
+  },
+
+  {
+    "question_id": "BEH001",
+    "stage": "behavioral",
+    "type": "behavioral",
+    "category": "Strengths",
+    "question": "What are your biggest strengths?",
+    "difficulty": "easy",
+    "evaluation_type": "behavioral",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BEH002",
+    "stage": "behavioral",
+    "type": "behavioral",
+    "category": "Weakness",
+    "question": "What is one weakness you are currently working to improve?",
+    "difficulty": "medium",
+    "evaluation_type": "behavioral",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BEH003",
+    "stage": "behavioral",
+    "type": "behavioral",
+    "category": "Problem Solving",
+    "question": "Tell me about a challenging situation you faced and how you handled it.",
+    "difficulty": "medium",
+    "evaluation_type": "behavioral",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BEH004",
+    "stage": "behavioral",
+    "type": "behavioral",
+    "category": "Failure",
+    "question": "Tell me about a time when something did not go according to your plan. What did you learn from it?",
+    "difficulty": "medium",
+    "evaluation_type": "behavioral",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BEH005",
+    "stage": "behavioral",
+    "type": "behavioral",
+    "category": "Teamwork",
+    "question": "Tell me about a time when you worked as part of a team.",
+    "difficulty": "medium",
+    "evaluation_type": "behavioral",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "BEH006",
+    "stage": "behavioral",
+    "type": "behavioral",
+    "category": "Time Management",
+    "question": "How do you manage multiple tasks when you have tight deadlines?",
+    "difficulty": "medium",
+    "evaluation_type": "behavioral",
+    "follow_up_enabled": true
+  },
+
+  {
+    "question_id": "TECH001",
+    "stage": "technical",
+    "type": "technical",
+    "category": "OOP",
+    "question": "What is polymorphism in Object-Oriented Programming? Explain with an example.",
+    "difficulty": "medium",
+    "evaluation_type": "technical",
+    "expected_answer": "Polymorphism allows the same interface or method to behave differently depending on the object or implementation.",
+    "key_concepts": [
+      "same interface",
+      "different behavior",
+      "method overriding",
+      "method overloading",
+      "runtime polymorphism",
+      "compile-time polymorphism"
+    ],
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "TECH002",
+    "stage": "technical",
+    "type": "technical",
+    "category": "DBMS",
+    "question": "What is database normalization and why is it used?",
+    "difficulty": "medium",
+    "evaluation_type": "technical",
+    "expected_answer": "Normalization organizes data into related tables to reduce redundancy and improve data consistency.",
+    "key_concepts": [
+      "redundancy",
+      "data consistency",
+      "tables",
+      "functional dependency",
+      "normal forms"
+    ],
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "TECH003",
+    "stage": "technical",
+    "type": "technical",
+    "category": "Operating Systems",
+    "question": "What is the difference between a process and a thread?",
+    "difficulty": "medium",
+    "evaluation_type": "technical",
+    "expected_answer": "A process is an independent program execution unit, while a thread is a smaller execution unit within a process that shares resources.",
+    "key_concepts": [
+      "process",
+      "thread",
+      "independent memory",
+      "shared resources",
+      "execution unit"
+    ],
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "TECH004",
+    "stage": "technical",
+    "type": "technical",
+    "category": "Computer Networks",
+    "question": "What is the difference between TCP and UDP?",
+    "difficulty": "medium",
+    "evaluation_type": "technical",
+    "expected_answer": "TCP is connection-oriented and provides reliable ordered delivery, while UDP is connectionless and generally provides faster delivery without guaranteed reliability.",
+    "key_concepts": [
+      "TCP",
+      "UDP",
+      "connection-oriented",
+      "connectionless",
+      "reliable",
+      "ordered delivery",
+      "speed"
+    ],
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "TECH005",
+    "stage": "technical",
+    "type": "technical",
+    "category": "DSA",
+    "question": "What is binary search and what is its time complexity?",
+    "difficulty": "medium",
+    "evaluation_type": "technical",
+    "expected_answer": "Binary search repeatedly divides a sorted search space into two halves. Its time complexity is O(log n).",
+    "key_concepts": [
+      "sorted data",
+      "divide and conquer",
+      "middle element",
+      "O(log n)"
+    ],
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "TECH006",
+    "stage": "technical",
+    "type": "technical",
+    "category": "AI/ML",
+    "question": "What is the difference between supervised and unsupervised learning?",
+    "difficulty": "medium",
+    "evaluation_type": "technical",
+    "expected_answer": "Supervised learning uses labeled data to learn a mapping between inputs and outputs, while unsupervised learning works with unlabeled data to discover patterns or structure.",
+    "key_concepts": [
+      "labeled data",
+      "unlabeled data",
+      "classification",
+      "regression",
+      "clustering"
+    ],
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "TECH007",
+    "stage": "technical",
+    "type": "technical",
+    "category": "Web Development",
+    "question": "What is the difference between frontend and backend development?",
+    "difficulty": "easy",
+    "evaluation_type": "technical",
+    "expected_answer": "Frontend handles the user interface and client-side interactions, while backend handles server-side logic, APIs, databases, and application services.",
+    "key_concepts": [
+      "frontend",
+      "backend",
+      "user interface",
+      "server",
+      "API",
+      "database"
+    ],
+    "follow_up_enabled": true
+  },
+
+  {
+    "question_id": "CODE001",
+    "stage": "coding",
+    "type": "coding",
+    "category": "Arrays",
+    "question": "Given an array of integers, find the largest element in the array.",
+    "difficulty": "easy",
+    "evaluation_type": "coding",
+    "language_options": [
+      "C++",
+      "Python",
+      "Java"
+    ],
+    "expected_approach": "Traverse the array once while maintaining the largest element found so far.",
+    "time_complexity": "O(n)",
+    "space_complexity": "O(1)",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "CODE002",
+    "stage": "coding",
+    "type": "coding",
+    "category": "Arrays",
+    "question": "Given an array of integers and a target value, find two numbers whose sum equals the target.",
+    "difficulty": "easy",
+    "evaluation_type": "coding",
+    "language_options": [
+      "C++",
+      "Python",
+      "Java"
+    ],
+    "expected_approach": "Use a hash map or unordered map to store previously seen values and search for the required complement.",
+    "time_complexity": "O(n)",
+    "space_complexity": "O(n)",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "CODE003",
+    "stage": "coding",
+    "type": "coding",
+    "category": "Strings",
+    "question": "Given a string, determine whether it is a palindrome.",
+    "difficulty": "easy",
+    "evaluation_type": "coding",
+    "language_options": [
+      "C++",
+      "Python",
+      "Java"
+    ],
+    "expected_approach": "Compare characters from both ends while moving toward the center.",
+    "time_complexity": "O(n)",
+    "space_complexity": "O(1)",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "CODE004",
+    "stage": "coding",
+    "type": "coding",
+    "category": "DSA",
+    "question": "Given a sorted array and a target value, implement binary search to find the target.",
+    "difficulty": "medium",
+    "evaluation_type": "coding",
+    "language_options": [
+      "C++",
+      "Python",
+      "Java"
+    ],
+    "expected_approach": "Repeatedly compare the target with the middle element and eliminate half of the search space.",
+    "time_complexity": "O(log n)",
+    "space_complexity": "O(1)",
+    "follow_up_enabled": true
+  },
+
+  {
+    "question_id": "PROJ001",
+    "stage": "project_discussion",
+    "type": "project",
+    "category": "Project Introduction",
+    "question": "Tell me about one of the projects you have worked on.",
+    "difficulty": "easy",
+    "evaluation_type": "project",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "PROJ002",
+    "stage": "project_discussion",
+    "type": "project",
+    "category": "Technical Role",
+    "question": "What was your specific role in the project?",
+    "difficulty": "medium",
+    "evaluation_type": "project",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "PROJ003",
+    "stage": "project_discussion",
+    "type": "project",
+    "category": "Technical Challenge",
+    "question": "What was the biggest technical challenge you faced while building the project?",
+    "difficulty": "medium",
+    "evaluation_type": "project",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "PROJ004",
+    "stage": "project_discussion",
+    "type": "project",
+    "category": "Problem Solving",
+    "question": "How did you solve that technical challenge?",
+    "difficulty": "medium",
+    "evaluation_type": "project",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "PROJ005",
+    "stage": "project_discussion",
+    "type": "project",
+    "category": "Improvement",
+    "question": "If you had more time, what would you improve or add to the project?",
+    "difficulty": "medium",
+    "evaluation_type": "project",
+    "follow_up_enabled": true
+  },
+
+  {
+    "question_id": "CLO001",
+    "stage": "closing",
+    "type": "behavioral",
+    "category": "Career",
+    "question": "Why are you interested in this role or internship?",
+    "difficulty": "medium",
+    "evaluation_type": "closing",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "CLO002",
+    "stage": "closing",
+    "type": "behavioral",
+    "category": "Career Goals",
+    "question": "Where do you see yourself professionally in the next few years?",
+    "difficulty": "medium",
+    "evaluation_type": "closing",
+    "follow_up_enabled": true
+  },
+  {
+    "question_id": "CLO003",
+    "stage": "closing",
+    "type": "behavioral",
+    "category": "Candidate Questions",
+    "question": "Do you have any questions for the interviewer?",
+    "difficulty": "easy",
+    "evaluation_type": "closing",
+    "follow_up_enabled": false 
+  }
+]

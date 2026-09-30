@@ -1,0 +1,1093 @@
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #f5f7fa;
+  background: #090b10;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(120, 120, 255, 0.08),
+      transparent 35%
+    ),
+    #090b10;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+  min-height: 100vh;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.nav {
+  height: 72px;
+  border-bottom: 1px solid #1d212b;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 6%;
+
+  background: rgba(9, 11, 16, 0.88);
+
+  backdrop-filter: blur(12px);
+
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.logo {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #171b25;
+
+  border: 1px solid #2a3040;
+}
+
+.muted {
+  color: #8c94a6;
+}
+
+.navLinks {
+  color: #8c94a6;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.container {
+  width: min(1180px, 90%);
+  margin: 0 auto;
+  padding: 55px 0 80px;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+.eyebrow {
+  color: #8f98aa;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  margin-bottom: 14px;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  max-width: 680px;
+
+  margin-top: 18px;
+
+  color: #9da5b5;
+
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   LANDING PAGE
+========================================================= */
+
+.landing {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
+.hero {
+  min-height: 440px;
+
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr;
+
+  align-items: center;
+
+  gap: 60px;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 1.04;
+
+  max-width: 780px;
+}
+
+.hero h1 span {
+  color: #8f98aa;
+}
+
+.heroButton {
+  margin-top: 30px;
+}
+
+.heroCard {
+  min-height: 300px;
+
+  border: 1px solid #262c38;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #141821,
+      #0d1016
+    );
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 15px;
+
+  color: #cfd5df;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.25);
+}
+
+.heroCard svg {
+  color: #a9b1c0;
+}
+
+.heroCard strong {
+  font-size: 20px;
+}
+
+.heroCard small {
+  color: #747d8e;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primary {
+  border: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 13px 19px;
+
+  border-radius: 10px;
+
+  background: #f1f3f7;
+  color: #0b0d12;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    background 0.2s ease;
+}
+
+.primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel {
+  border: 1px solid #222733;
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  background: #0e1117;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 25px;
+}
+
+.sectionTitle svg {
+  color: #8992a3;
+}
+
+.sectionTitle h2 {
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   STAGE GRID
+========================================================= */
+
+.stageGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.stageCard {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 18px;
+
+  border: 1px solid #202531;
+
+  border-radius: 13px;
+
+  background: #11151d;
+
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.stageCard:hover {
+  border-color: #343b4b;
+  transform: translateY(-2px);
+}
+
+.stageNumber {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #1a1f29;
+
+  color: #8e97a8;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stageCard strong {
+  display: block;
+
+  font-size: 14px;
+
+  margin-bottom: 4px;
+}
+
+.stageCard small {
+  color: #747d8e;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   INTERVIEW
+========================================================= */
+
+.interview {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.interviewHeader {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 18px;
+}
+
+.interviewHeader h2 {
+  font-size: 32px;
+}
+
+.questionCounter {
+  color: #858e9f;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PROGRESS BAR
+========================================================= */
+
+.stageProgress {
+  width: 100%;
+  height: 5px;
+
+  background: #1b202a;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  margin-bottom: 28px;
+}
+
+.stageProgressBar {
+  height: 100%;
+
+  background: #d9dee7;
+
+  border-radius: inherit;
+
+  transition: width 0.35s ease;
+}
+
+
+/* =========================================================
+   QUESTION CARD
+========================================================= */
+
+.questionCard {
+  border: 1px solid #252b37;
+
+  border-radius: 20px;
+
+  padding: 35px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #12161e,
+      #0d1016
+    );
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+.questionMeta {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 30px;
+}
+
+.questionMeta span {
+  padding: 6px 10px;
+
+  border-radius: 7px;
+
+  background: #1a1f28;
+
+  color: #8e97a8;
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.05em;
+}
+
+.questionCard h1 {
+  font-size: clamp(26px, 4vw, 38px);
+
+  line-height: 1.25;
+
+  margin-bottom: 28px;
+}
+
+.questionCard textarea {
+  width: 100%;
+
+  min-height: 220px;
+
+  resize: vertical;
+
+  border: 1px solid #2a303c;
+
+  border-radius: 12px;
+
+  outline: none;
+
+  padding: 18px;
+
+  background: #0a0d12;
+
+  color: #e9edf3;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.questionCard textarea::placeholder {
+  color: #596273;
+}
+
+.questionCard textarea:focus {
+  border-color: #555e70;
+
+  box-shadow:
+    0 0 0 3px rgba(120, 130, 150, 0.08);
+}
+
+.answerFooter {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  margin-top: 20px;
+}
+
+.answerFooter span {
+  color: #687181;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   STAGE TRACKER
+========================================================= */
+
+.stageTracker {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+
+  gap: 7px;
+
+  margin-top: 30px;
+}
+
+.stageItem {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 8px;
+
+  text-align: center;
+
+  color: #555e6e;
+
+  font-size: 10px;
+}
+
+.stageDot {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 1px solid #292f3b;
+
+  background: #10141b;
+
+  font-size: 11px;
+}
+
+.stageItem.active {
+  color: #d6dbe4;
+}
+
+.stageItem.active .stageDot {
+  border-color: #bfc6d1;
+
+  background: #dfe3e9;
+
+  color: #101218;
+}
+
+.stageItem.completed {
+  color: #7d8798;
+}
+
+.stageItem.completed .stageDot {
+  background: #252b35;
+
+  border-color: #363d4a;
+
+  color: #d4dae3;
+}
+
+
+/* =========================================================
+   ANALYZING SCREEN
+========================================================= */
+
+.finished {
+  min-height: 65vh;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+
+.finishIcon {
+  width: 82px;
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 22px;
+
+  background: #151a22;
+
+  border: 1px solid #2a303d;
+
+  margin-bottom: 25px;
+
+  animation: pulse 1.8s infinite;
+}
+
+.finished h1 {
+  font-size: 44px;
+}
+
+.finished .subtitle {
+  max-width: 600px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   REPORT
+========================================================= */
+
+.report {
+  max-width: 1100px;
+
+  margin: 0 auto;
+}
+
+.reportHeader {
+  margin-bottom: 35px;
+}
+
+.reportHeader h1 {
+  font-size: clamp(38px, 5vw, 58px);
+
+  line-height: 1.05;
+}
+
+.reportHeader .subtitle {
+  margin-top: 12px;
+}
+
+
+/* =========================================================
+   SUMMARY CARD
+========================================================= */
+
+.summaryCard {
+  padding: 28px;
+
+  border: 1px solid #292f3b;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #151922,
+      #0e1117
+    );
+
+  margin-bottom: 25px;
+}
+
+.summaryCard h2 {
+  font-size: 19px;
+
+  margin-bottom: 13px;
+}
+
+.summaryCard p {
+  color: #a2aaba;
+
+  line-height: 1.75;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ANALYSIS GRID
+========================================================= */
+
+.analysisGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   ANALYSIS CARD
+========================================================= */
+
+.analysisCard {
+  padding: 22px;
+
+  border: 1px solid #242a35;
+
+  border-radius: 15px;
+
+  background: #10141b;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.analysisCard:hover {
+  transform: translateY(-2px);
+
+  border-color: #343b49;
+}
+
+.analysisCardTop {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+}
+
+.analysisCardTop h3 {
+  font-size: 15px;
+}
+
+.analysisCardTop strong {
+  font-size: 17px;
+
+  color: #e3e7ed;
+}
+
+
+/* =========================================================
+   SCORE BAR
+========================================================= */
+
+.scoreBar {
+  width: 100%;
+  height: 7px;
+
+  background: #1d222c;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  margin-bottom: 16px;
+}
+
+.scoreBar > div {
+  height: 100%;
+
+  background: #cbd1da;
+
+  border-radius: inherit;
+
+  transition: width 0.5s ease;
+}
+
+.analysisCard p {
+  color: #8e97a7;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   REPORT COLUMNS
+========================================================= */
+
+.reportColumns {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+}
+
+.reportBox {
+  padding: 25px;
+
+  border: 1px solid #242a35;
+
+  border-radius: 16px;
+
+  background: #10141b;
+}
+
+.reportBox h2 {
+  font-size: 18px;
+
+  margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   FEEDBACK ITEMS
+========================================================= */
+
+.feedbackItem {
+  padding: 13px 0;
+
+  border-bottom: 1px solid #202630;
+
+  color: #9ca5b5;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.feedbackItem:last-child {
+  border-bottom: none;
+
+  padding-bottom: 0;
+}
+
+
+/* =========================================================
+   FINAL FEEDBACK
+========================================================= */
+
+.finalFeedback {
+  margin-bottom: 25px;
+}
+
+.finalFeedback p {
+  padding: 12px 0;
+
+  color: #9ca5b5;
+
+  font-size: 14px;
+
+  line-height: 1.65;
+
+  border-bottom: 1px solid #202630;
+}
+
+.finalFeedback p:last-child {
+  border-bottom: none;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error {
+  max-width: 900px;
+
+  margin: 25px auto 0;
+
+  padding: 14px 18px;
+
+  border: 1px solid #493138;
+
+  border-radius: 10px;
+
+  background: #1a1115;
+
+  color: #d6aab2;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .hero {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .heroCard {
+    min-height: 220px;
+  }
+
+  .stageGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reportColumns {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .nav {
+    height: 64px;
+
+    padding: 0 5%;
+  }
+
+  .navLinks {
+    display: none;
+  }
+
+  .container {
+    width: 92%;
+
+    padding-top: 35px;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .heroCard {
+    min-height: 190px;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+
+  .questionCard {
+    padding: 22px;
+  }
+
+  .questionCard h1 {
+    font-size: 27px;
+  }
+
+  .questionCard textarea {
+    min-height: 190px;
+  }
+
+  .interviewHeader {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .interviewHeader h2 {
+    font-size: 27px;
+  }
+
+  .answerFooter {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .answerFooter .primary {
+    width: 100%;
+  }
+
+  .stageTracker {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    row-gap: 15px;
+  }
+
+  .stageItem span {
+    font-size: 9px;
+  }
+
+  .reportHeader h1 {
+    font-size: 40px;
+  }
+
+  .summaryCard,
+  .reportBox {
+    padding: 20px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .primary {
+    width: 100%;
+  }
+
+  .stageTracker {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .questionMeta {
+    flex-wrap: wrap;
+  }
+
+  .analysisCard {
+    padding: 18px;
+  }
+
+}

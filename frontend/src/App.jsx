@@ -1,27 +1,44 @@
-
 import { useState } from "react";
+import { Brain, AlertCircle, X, Sparkles, Loader2, RotateCcw } from "lucide-react";
 
 import Navbar from "./components/Navbar";
+import RoleSelector from "./components/RoleSelector";
 import ModeSelector from "./components/ModeSelector";
 
 import LandingPage from "./pages/LandingPage";
 import InterviewPage from "./pages/InterviewPage";
 import ReportPage from "./pages/ReportPage";
+import DashboardPage from "./pages/DashboardPage";
 
 import {
   startInterview as startInterviewAPI,
   submitAnswer as submitAnswerAPI,
   analyzeInterview as analyzeInterviewAPI,
+  finishInterview as finishInterviewAPI,
+  getHistoryDetail as getHistoryDetailAPI,
 } from "./services/interviewService";
 
 function App() {
   // ============================================
-  // INTERVIEW STATE
+  // NAVIGATION & VIEW STATE
   // ============================================
+  const [currentView, setCurrentView] = useState("interview"); // "interview" | "dashboard"
 
+  // ============================================
+  // INTERVIEW SETUP STATE
+  // ============================================
+  const [role, setRole] = useState("web_developer");
+  const [experienceLevel, setExperienceLevel] = useState("beginner");
+  const [mode, setMode] = useState(null);
+  const [setupStep, setSetupStep] = useState("landing"); // "landing" | "role" | "mode" | "interview"
+
+  // ============================================
+  // ACTIVE INTERVIEW & REPORT STATE
+  // ============================================
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
+  const [analysisFailed, setAnalysisFailed] = useState(false);
 
   const [analysis, setAnalysis] = useState(null);
 
@@ -30,37 +47,43 @@ function App() {
   const [progress, setProgress] = useState(null);
 
   // ============================================
-  // MODE STATE
+  // UI & FEEDBACK STATE
   // ============================================
-
-  const [mode, setMode] = useState(null);
-  const [modeSelected, setModeSelected] = useState(false);
-
-  // ============================================
-  // UI STATE
-  // ============================================
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // ============================================
-  // STEP 1
-  // LANDING PAGE → MODE SELECTOR
+  // STEP 1: LANDING PAGE → ROLE SELECTION
   // ============================================
-
-  function openModeSelector() {
+  function handleLandingStart() {
     setError("");
-    setModeSelected(true);
+    setSetupStep("role");
   }
 
   // ============================================
-  // STEP 2
-  // MODE SELECTOR → START INTERVIEW
+  // STEP 2: ROLE SELECTION → MODE SELECTION
   // ============================================
+  function handleRoleContinue() {
+    if (!role) {
+      setError("Please select a target job role before continuing.");
+      return;
+    }
+    setError("");
+    setSetupStep("mode");
+  }
 
+  // ============================================
+  // STEP 3: MODE SELECTION → START INTERVIEW
+  // ============================================
   async function handleModeContinue() {
+    if (!role) {
+      setError("Please select a target job role.");
+      setSetupStep("role");
+      return;
+    }
+
     if (!mode) {
-      setError("Please select an interview mode.");
+      setError("Please select an interview mode (Text or Voice) before continuing.");
       return;
     }
 
@@ -68,67 +91,65 @@ function App() {
   }
 
   // ============================================
-  // START INTERVIEW
+  // START INTERVIEW API CALL
   // ============================================
-
   async function startInterview() {
     setLoading(true);
     setError("");
 
     try {
-      /*
-       * Currently the backend starts the same interview
-       * regardless of text or voice mode.
-       *
-       * We keep the selected mode in React state so that
-       * the frontend can later use it for:
-       *
-       * text  → textarea
-       * voice → microphone / speech recognition
-       */
-
-      const data = await startInterviewAPI();
+      const data = await startInterviewAPI(role, experienceLevel, mode);
 
       setStarted(true);
       setFinished(false);
       setAnalyzing(false);
+      setAnalysisFailed(false);
+      setSetupStep("interview");
 
       setQuestion(data.question);
       setProgress(data.progress);
 
       setAnswer("");
       setAnalysis(null);
-    } catch (error) {
-      console.error(error);
-
-      setError(
-        "Could not start the interview. Please make sure the FastAPI backend is running.",
-      );
+    } catch (err) {
+      console.error(err);
+      const detailMsg =
+        err.response?.data?.detail ||
+        "Could not connect to the mock interview engine. Please make sure the FastAPI backend is running on http://127.0.0.1:8000.";
+      setError(detailMsg);
     } finally {
       setLoading(false);
     }
   }
 
   // ============================================
-  // ANALYZE INTERVIEW
+  // ANALYZE INTERVIEW (WITH DUPLICATE-REQUEST GUARD)
   // ============================================
-
   async function analyzeInterview() {
+    if (analyzing) return;
+
     setAnalyzing(true);
     setError("");
+    setAnalysisFailed(false);
 
     try {
       const data = await analyzeInterviewAPI();
-
+      if (!data || !data.analysis) {
+        throw new Error("Invalid response format received from evaluation engine.");
+      }
       setAnalysis(data.analysis);
       setFinished(true);
-    } catch (error) {
-      console.error(error);
-
+      setAnalysisFailed(false);
+    } catch (err) {
+      console.error("AI Analysis error:", err);
+      // Clean, user-facing error message without internal stack traces, API keys, or raw secrets
       const message =
-        error.response?.data?.detail || "AI analysis failed.";
-
+        err.response?.data?.detail === "AI analysis failed."
+          ? "The AI evaluation engine could not complete the report at this moment. Your interview answers are saved on the server. Please click Retry below."
+          : err.response?.data?.detail ||
+            "Could not complete AI evaluation. Please verify backend connectivity and retry.";
       setError(message);
+      setAnalysisFailed(true);
     } finally {
       setAnalyzing(false);
     }
@@ -137,10 +158,9 @@ function App() {
   // ============================================
   // SUBMIT ANSWER
   // ============================================
-
   async function submitAnswer() {
     if (!answer.trim()) {
-      setError("Please provide an answer before continuing.");
+      setError("Please provide an answer before submitting.");
       return;
     }
 
@@ -152,33 +172,46 @@ function App() {
 
       setProgress(data.progress);
 
-      // ==========================================
-      // INTERVIEW FINISHED
-      // ==========================================
-
       if (data.status === "finished") {
         setQuestion(null);
         setAnswer("");
-
         await analyzeInterview();
-
         return;
       }
 
-      // ==========================================
-      // NEXT QUESTION
-      // ==========================================
-
       setQuestion(data.question);
       setAnswer("");
-    } catch (error) {
-      console.error(error);
-
+    } catch (err) {
+      console.error(err);
       const message =
-        error.response?.data?.detail ||
-        "Could not submit your answer.";
-
+        err.response?.data?.detail || "Could not submit your answer. Please retry.";
       setError(message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ============================================
+  // FINISH EARLY
+  // ============================================
+  async function handleFinishEarly() {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      await finishInterviewAPI();
+      setQuestion(null);
+      setAnswer("");
+      await analyzeInterview();
+    } catch (err) {
+      console.error(err);
+      setError("Could not complete the interview session early.");
     } finally {
       setLoading(false);
     }
@@ -187,11 +220,18 @@ function App() {
   // ============================================
   // RESET INTERVIEW
   // ============================================
-
   function resetInterview() {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+
     setStarted(false);
     setFinished(false);
     setAnalyzing(false);
+    setAnalysisFailed(false);
+    setSetupStep("landing");
 
     setQuestion(null);
     setAnswer("");
@@ -200,127 +240,247 @@ function App() {
     setAnalysis(null);
     setError("");
 
-    // Reset mode selection
     setMode(null);
-    setModeSelected(false);
+    setCurrentView("interview");
   }
 
   // ============================================
-  // RETURN UI
+  // REOPEN HISTORICAL REPORT FROM DASHBOARD
   // ============================================
+  async function handleViewHistoricalReport(recordId) {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const data = await getHistoryDetailAPI(recordId);
+      if (!data || !data.interview) {
+        throw new Error(`Interview report #${recordId} could not be loaded.`);
+      }
+
+      const rec = data.interview;
+      setAnalysis(rec.analysis);
+      setProgress({
+        answered_questions: rec.answered_questions,
+        total_questions: rec.total_questions,
+        role_title: rec.role_title,
+        experience_level: rec.experience_level,
+      });
+      setRole(rec.role);
+      setExperienceLevel(rec.experience_level);
+      setMode(rec.mode);
+
+      setStarted(false);
+      setFinished(true);
+      setAnalyzing(false);
+      setAnalysisFailed(false);
+      setCurrentView("interview");
+    } catch (err) {
+      console.error("Failed to load historical report:", err);
+      setError(
+        err.response?.data?.detail ||
+          "Could not open historical evaluation report. Please verify backend connectivity."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const isNavResetAvailable =
+    currentView === "dashboard" || setupStep !== "landing" || started || finished || analysisFailed;
 
   return (
     <div className="app">
-      <Navbar />
+      <Navbar
+        onReset={isNavResetAvailable ? resetInterview : undefined}
+        onOpenDashboard={() => setCurrentView((prev) => (prev === "dashboard" ? "interview" : "dashboard"))}
+        currentView={currentView}
+      />
 
       <main className="container">
-
-        {/* ========================================
-            STEP 1
-            LANDING PAGE
-        ======================================== */}
-
-        {!started &&
-          !finished &&
-          !analyzing &&
-          !modeSelected && (
-            <LandingPage
-              onStart={openModeSelector}
-              loading={loading}
-            />
-          )}
-
-        {/* ========================================
-            STEP 2
-            MODE SELECTOR
-        ======================================== */}
-
-        {!started &&
-          !finished &&
-          !analyzing &&
-          modeSelected && (
-            <ModeSelector
-              mode={mode}
-              setMode={setMode}
-              onContinue={handleModeContinue}
-            />
-          )}
-
-        {/* ========================================
-            STEP 3
-            INTERVIEW
-        ======================================== */}
-
-        {started &&
-          !finished &&
-          !analyzing &&
-          question && (
-            <InterviewPage
-              question={question}
-              answer={answer}
-              setAnswer={setAnswer}
-              progress={progress}
-              loading={loading}
-              onSubmit={submitAnswer}
-              mode={mode}
-            />
-          )}
-
-        {/* ========================================
-            STEP 4
-            AI ANALYSIS
-        ======================================== */}
-
-        {analyzing && (
-          <section className="finished">
-
-            <div className="finishIcon">
-              🧠
-            </div>
-
-            <p className="eyebrow">
-              AI ANALYSIS
-            </p>
-
-            <h1>
-              Analyzing Interview
-            </h1>
-
-            <p className="subtitle">
-              We are reviewing your communication,
-              behavioral responses, technical
-              knowledge, and project discussion.
-            </p>
-
-          </section>
-        )}
-
-        {/* ========================================
-            STEP 5
-            REPORT
-        ======================================== */}
-
-        {finished && analysis && (
-          <ReportPage
-            analysis={analysis}
-            onNewInterview={resetInterview}
-          />
-        )}
-
-        {/* ========================================
-            ERROR MESSAGE
-        ======================================== */}
-
+        {/* ================= ERROR NOTIFICATION ================= */}
         {error && (
-          <div className="error">
-            {error}
+          <div className="errorBanner" role="alert">
+            <div className="errorBannerContent">
+              <AlertCircle size={18} className="errorIcon" aria-hidden="true" />
+              <span>{error}</span>
+            </div>
+            <button
+              type="button"
+              className="errorDismissBtn"
+              onClick={() => setError("")}
+              aria-label="Dismiss error notification"
+            >
+              <X size={16} />
+            </button>
           </div>
         )}
 
+        {/* ================= VIEW: DASHBOARD ================= */}
+        {currentView === "dashboard" && (
+          <DashboardPage
+            onStartInterview={() => {
+              resetInterview();
+              setSetupStep("role");
+            }}
+            onBackToLanding={() => {
+              resetInterview();
+            }}
+            onViewReport={handleViewHistoricalReport}
+          />
+        )}
+
+        {/* ================= VIEW: INTERVIEW WORKFLOW ================= */}
+        {currentView !== "dashboard" && (
+          <>
+            {/* ================= STEP 1: LANDING PAGE ================= */}
+            {!started && !finished && !analyzing && !analysisFailed && setupStep === "landing" && (
+              <LandingPage onStart={handleLandingStart} loading={loading} />
+            )}
+
+            {/* ================= STEP 2: ROLE SELECTION ================= */}
+            {!started && !finished && !analyzing && !analysisFailed && setupStep === "role" && (
+              <RoleSelector
+                role={role}
+                setRole={setRole}
+                experienceLevel={experienceLevel}
+                setExperienceLevel={setExperienceLevel}
+                onContinue={handleRoleContinue}
+                onBack={() => setSetupStep("landing")}
+              />
+            )}
+
+            {/* ================= STEP 3: MODE SELECTION ================= */}
+            {!started && !finished && !analyzing && !analysisFailed && setupStep === "mode" && (
+              <ModeSelector
+                mode={mode}
+                setMode={setMode}
+                role={role}
+                experienceLevel={experienceLevel}
+                onChangeRole={() => setSetupStep("role")}
+                onContinue={handleModeContinue}
+                onBack={() => setSetupStep("role")}
+                loading={loading}
+              />
+            )}
+
+            {/* ================= STEP 4: INTERVIEW IN PROGRESS ================= */}
+            {started && !finished && !analyzing && !analysisFailed && question && (
+              <InterviewPage
+                question={question}
+                answer={answer}
+                setAnswer={setAnswer}
+                progress={progress}
+                loading={loading}
+                analyzing={analyzing}
+                onSubmit={submitAnswer}
+                onFinishEarly={handleFinishEarly}
+                mode={mode}
+                onSwitchMode={setMode}
+              />
+            )}
+
+            {/* ================= STEP 5: AI ANALYSIS LOADING SCREEN ================= */}
+            {analyzing && (
+              <section className="analyzingScreen" aria-live="polite">
+                <div className="analyzingCard">
+                  <div className="analyzingOrb">
+                    <Brain size={44} className="analyzingBrainIcon" />
+                    <span className="orbRing ring1" />
+                    <span className="orbRing ring2" />
+                  </div>
+
+                  <div className="analyzingHeader">
+                    <div className="analyzingBadge">
+                      <Sparkles size={14} />
+                      <span>AI RUBRIC ENGINE</span>
+                    </div>
+                    <h1>Evaluating Your Interview</h1>
+                    <p className="analyzingSubtitle">
+                      Synthesizing your communication, technical reasoning, behavioral responses,
+                      and project discussion into a role-aligned performance report.
+                    </p>
+                  </div>
+
+                  <div className="analyzingProgressSteps">
+                    <div className="analyzingStep done">
+                      <span className="stepDot" />
+                      <span>Responses Ingested</span>
+                    </div>
+                    <div className="analyzingStep active">
+                      <Loader2 size={14} className="stepSpinner" />
+                      <span>Scoring 7 Core Dimensions</span>
+                    </div>
+                    <div className="analyzingStep">
+                      <span className="stepDot" />
+                      <span>Generating Role Recommendations</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* ================= STEP 5B: ANALYSIS ERROR & RETRY SCREEN ================= */}
+            {analysisFailed && !finished && !analyzing && (
+              <section className="analysisErrorScreen" aria-live="assertive">
+                <div className="analysisErrorCard">
+                  <div className="analysisErrorIcon" aria-hidden="true">
+                    <AlertCircle size={38} />
+                  </div>
+                  <div className="analysisErrorBadge">Evaluation Interrupted</div>
+                  <h2>Unable to Complete Evaluation</h2>
+                  <p className="analysisErrorDesc">
+                    An issue occurred while communicating with the AI evaluation service.
+                    Your interview responses have been safely saved on the server.
+                    You can retry generating your report below.
+                  </p>
+
+                  <div className="analysisErrorActions">
+                    <button
+                      type="button"
+                      className="primary retryAnalysisBtn"
+                      onClick={analyzeInterview}
+                      disabled={analyzing}
+                    >
+                      <RotateCcw size={16} aria-hidden="true" />
+                      <span>Retry Analysis</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="ghostButton"
+                      onClick={resetInterview}
+                      disabled={analyzing}
+                    >
+                      <span>Start New Interview</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* ================= STEP 6: PERFORMANCE & FEEDBACK REPORT ================= */}
+            {finished && analysis && (
+              <ReportPage
+                analysis={analysis}
+                progress={progress}
+                mode={mode}
+                role={role}
+                experienceLevel={experienceLevel}
+                onNewInterview={resetInterview}
+                onOpenDashboard={() => setCurrentView("dashboard")}
+              />
+            )}
+          </>
+        )}
       </main>
     </div>
   );
 }
 
 export default App;
-

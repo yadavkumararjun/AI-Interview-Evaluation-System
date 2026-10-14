@@ -1,0 +1,2388 @@
+"""
+Curated Question Bank Generator for AI Mock Interview Evaluation System.
+Generates structured questions for all 6 roles and 7 stages:
+  - web_developer
+  - ai_engineer
+  - ml_engineer
+  - data_engineer
+  - backend_developer
+  - data_analyst
+"""
+
+import json
+import os
+
+questions = [
+    # =========================================================================
+    # STAGE 1: INTRODUCTION (Shared across roles) - Stage limit: 1
+    # =========================================================================
+    {
+        "question_id": "INT001",
+        "stage": "introduction",
+        "type": "behavioral",
+        "category": "Introduction",
+        "skill": "Communication",
+        "topic": "Professional Introduction",
+        "question": "Please introduce yourself, summarize your technical background, and share what motivates your interest in your target role.",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "communication",
+        "evaluation_rubric": [
+            "Clear chronological overview of academic or technical journey",
+            "Concise articulation of core technical interests and target position motivation",
+            "Poised verbal delivery and structured communication"
+        ],
+        "expected_concepts": [
+            "Background summary",
+            "Core skills",
+            "Role motivation",
+            "Professional aspirations"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "INT002",
+        "stage": "introduction",
+        "type": "behavioral",
+        "category": "Introduction",
+        "skill": "Communication",
+        "topic": "Career Trajectory",
+        "question": "Can you briefly introduce yourself, highlight your primary technical strengths, and describe what you are currently learning or working on?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "communication",
+        "evaluation_rubric": [
+            "Highlights foundational tools, languages, and technical strengths",
+            "Demonstrates active learning through current projects or studies",
+            "Professional tone and relevant focus"
+        ],
+        "expected_concepts": [
+            "Key technical stack",
+            "Current projects",
+            "Active learning"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "INT003",
+        "stage": "introduction",
+        "type": "behavioral",
+        "category": "Introduction",
+        "skill": "Communication",
+        "topic": "Engineering Identity",
+        "question": "How would you describe yourself as an engineer or analyst, and what core technical principles guide the way you build software and analyze data?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "communication",
+        "evaluation_rubric": [
+            "Defines personal engineering philosophy (e.g. simplicity, reliability, user empathy)",
+            "Connects principles to practical software or analysis habits",
+            "Self-awareness and clarity of expression"
+        ],
+        "expected_concepts": [
+            "Engineering mindset",
+            "Problem-solving principles",
+            "Attention to quality"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "INT004",
+        "stage": "introduction",
+        "type": "behavioral",
+        "category": "Introduction",
+        "skill": "Communication",
+        "topic": "Technology Passion",
+        "question": "Tell us about your background and what specific problems in software engineering or data systems you find most compelling to solve.",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "communication",
+        "evaluation_rubric": [
+            "Clear technical narrative",
+            "Specific domain problems identified",
+            "Enthusiasm for engineering impact"
+        ],
+        "expected_concepts": [
+            "Problem-solving motivation",
+            "Domain interest",
+            "Technical journey"
+        ],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 2: BACKGROUND (Shared across roles) - Stage limit: 2
+    # =========================================================================
+    {
+        "question_id": "BG001",
+        "stage": "background",
+        "type": "behavioral",
+        "category": "Education & Foundation",
+        "skill": "Foundations",
+        "topic": "Academic & Self-Taught Foundation",
+        "question": "What coursework, certifications, or self-directed learning paths have been most influential in building your technical foundation?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "background",
+        "evaluation_rubric": [
+            "Mentions key computer science concepts or practical courses",
+            "Explains how theoretical concepts translated into practical application",
+            "Demonstrates self-directed curiosity"
+        ],
+        "expected_concepts": [
+            "Core CS fundamentals",
+            "Hands-on practice",
+            "Continuous education"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BG002",
+        "stage": "background",
+        "type": "behavioral",
+        "category": "Career Motivation",
+        "skill": "Career Growth",
+        "topic": "Specialization Decision",
+        "question": "What motivated you to specialize in your chosen target field compared to other areas in computing and technology?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "background",
+        "evaluation_rubric": [
+            "Explains deliberate choice of career path",
+            "Articulates why the specific domain fits candidate strengths",
+            "Clear long-term career perspective"
+        ],
+        "expected_concepts": [
+            "Specialization rationale",
+            "Domain alignment",
+            "Long-term interest"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BG003",
+        "stage": "background",
+        "type": "behavioral",
+        "category": "Learning Methodology",
+        "skill": "Adaptability",
+        "topic": "Learning Unfamiliar Tech",
+        "question": "When you need to learn an unfamiliar programming language, framework, or tool for a project, what is your step-by-step approach?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "background",
+        "evaluation_rubric": [
+            "Structured learning process (docs, minimal reproduction, proof-of-concept)",
+            "Testing understanding through practical implementation",
+            "Efficiency and resourcefulness"
+        ],
+        "expected_concepts": [
+            "Official documentation review",
+            "Proof-of-concept prototyping",
+            "Debugging and experimentation"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BG004",
+        "stage": "background",
+        "type": "behavioral",
+        "category": "Engineering Workflow",
+        "skill": "Tooling",
+        "topic": "Developer Environment & Productivity",
+        "question": "Which software tools, version control habits, or developer workflows do you rely on to maintain productivity and code quality?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "background",
+        "evaluation_rubric": [
+            "Mentions Git workflow, branching, and commits",
+            "Effective use of IDEs, linters, formatters, and debugging tools",
+            "Focus on reproducible workflows"
+        ],
+        "expected_concepts": [
+            "Git version control",
+            "Linting & testing",
+            "Debugging workflows"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BG005",
+        "stage": "background",
+        "type": "behavioral",
+        "category": "Continuous Learning",
+        "skill": "Industry Awareness",
+        "topic": "Exploring Emerging Tech",
+        "question": "Describe an engineering topic or technical framework that you recently explored outside of your required coursework or daily responsibilities.",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "background",
+        "evaluation_rubric": [
+            "Genuine exploration of modern tools or methodologies",
+            "Ability to explain what the technology does and why it matters",
+            "Initiative and curiosity"
+        ],
+        "expected_concepts": [
+            "Self-motivated research",
+            "Technology evaluation",
+            "Practical takeaway"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BG006",
+        "stage": "background",
+        "type": "behavioral",
+        "category": "Technology Evaluation",
+        "skill": "Technical Judgment",
+        "topic": "Adopting Dependencies",
+        "question": "How do you evaluate whether a third-party library or dependency is mature and reliable enough to incorporate into an application?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "background",
+        "evaluation_rubric": [
+            "Checks maintenance activity, community support, license, and security vulnerabilities",
+            "Considers bundle size and maintenance overhead",
+            "Prudent approach to dependencies"
+        ],
+        "expected_concepts": [
+            "Maintenance & releases",
+            "Security & licensing",
+            "Dependency weight"
+        ],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 3: BEHAVIORAL (Shared across roles) - Stage limit: 3
+    # =========================================================================
+    {
+        "question_id": "BEH001",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Feedback & Growth",
+        "skill": "Collaboration",
+        "topic": "Receiving Technical Feedback",
+        "question": "Tell me about a time when you received critical feedback on your code, design, or data analysis. How did you process it and what did you change?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Non-defensive reception of feedback",
+            "Objective evaluation of critique and constructive action taken",
+            "Reflection on personal and professional growth"
+        ],
+        "expected_concepts": [
+            "STAR method (Situation, Task, Action, Result)",
+            "Code review receptivity",
+            "Positive adaptation"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH002",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Conflict Resolution",
+        "skill": "Teamwork",
+        "topic": "Navigating Technical Disagreements",
+        "question": "Describe a scenario where you and a colleague or peer had different technical opinions on how to implement a feature or solve an issue. How did you resolve it?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Focus on objective data, benchmarks, or requirements rather than ego",
+            "Active listening and empathy toward alternative perspectives",
+            "Constructive compromise or evidence-based resolution"
+        ],
+        "expected_concepts": [
+            "Respectful debate",
+            "Prototyping / benchmarking to decide",
+            "Alignment on goals"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH003",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Time Management",
+        "skill": "Execution",
+        "topic": "Prioritization Under Deadlines",
+        "question": "How do you manage your priorities when faced with competing deadlines, unexpected bugs, or shifting technical requirements?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Systematic triage (urgency vs importance)",
+            "Proactive communication with stakeholders or teammates",
+            "Delivery of MVP or critical path first"
+        ],
+        "expected_concepts": [
+            "Issue triage",
+            "Stakeholder communication",
+            "Iterative scope management"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH004",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Resilience & Failure",
+        "skill": "Problem Solving",
+        "topic": "Overcoming Project Failure",
+        "question": "Can you share an experience where an implementation or experiment completely failed or hit a dead end? What was your reaction and what did you learn?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Honest ownership of the failure",
+            "Root-cause analysis rather than finger-pointing",
+            "Actionable insights applied to subsequent work"
+        ],
+        "expected_concepts": [
+            "Root cause analysis",
+            "Accountability",
+            "Lessons learned"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH005",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Communication",
+        "skill": "Communication",
+        "topic": "Explaining Technical Concepts to Non-Engineers",
+        "question": "Describe a situation where you had to explain a complex technical bug or architecture trade-off to a non-technical stakeholder or client.",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Translating jargon into business value or intuitive analogies",
+            "Checking for comprehension and encouraging questions",
+            "Patient and empathetic demeanor"
+        ],
+        "expected_concepts": [
+            "Plain language communication",
+            "Business context framing",
+            "Active listener verification"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH006",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Adaptability",
+        "skill": "Agility",
+        "topic": "Handling Requirement Shifts",
+        "question": "Give an example of a project where requirements shifted midway through development. How did you adapt your architecture and workflow?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Calm and structured response to change",
+            "Refactoring modular components without discarding all progress",
+            "Realignment with team milestones"
+        ],
+        "expected_concepts": [
+            "Modular code design",
+            "Scope negotiation",
+            "Agile adaptability"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH007",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Initiative",
+        "skill": "Ownership",
+        "topic": "Proactive Quality Improvement",
+        "question": "Tell me about a time when you identified an unassigned bug, performance bottleneck, or security risk in a project. What proactive steps did you take?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Demonstrates ownership beyond assigned scope",
+            "Responsible reporting or fixing with regression tests",
+            "Focus on system reliability"
+        ],
+        "expected_concepts": [
+            "Proactive initiative",
+            "Root-cause reproduction",
+            "Quality mindset"
+        ],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BEH008",
+        "stage": "behavioral",
+        "type": "behavioral",
+        "category": "Autonomy",
+        "skill": "Self-Direction",
+        "topic": "Working With Ambiguity",
+        "question": "Describe a project where you were given high-level requirements with little day-to-day supervision. How did you break down tasks and measure progress?",
+        "difficulty": "hard",
+        "roles": ["all"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "behavioral",
+        "evaluation_rubric": [
+            "Breaks vague goals into verifiable milestones",
+            "Establishes self-imposed check-ins and quality gates",
+            "Resourceful problem discovery and resolution"
+        ],
+        "expected_concepts": [
+            "Self-direction",
+            "Milestone decomposition",
+            "Proactive status reporting"
+        ],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 4: TECHNICAL - WEB DEVELOPER (8 questions) - Stage limit: 4
+    # Topics: HTML, CSS, JavaScript, React, State Management, REST APIs, Browser, Web Performance
+    # =========================================================================
+    {
+        "question_id": "WEB_TECH_01",
+        "stage": "technical",
+        "type": "technical",
+        "category": "CSS & Responsive Layout",
+        "skill": "CSS Layouts",
+        "topic": "Flexbox vs Grid",
+        "question": "What is the architectural difference between CSS Flexbox and CSS Grid? In what layout scenarios would you choose one over the other?",
+        "difficulty": "easy",
+        "roles": ["web_developer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Articulates that Flexbox is 1-dimensional (row OR column) and Grid is 2-dimensional (rows AND columns simultaneously)",
+            "Identifies content-first layouts for Flexbox vs layout-first structures for Grid",
+            "Provides practical UI examples (e.g. navbars vs dashboard grid systems)"
+        ],
+        "expected_concepts": ["1D vs 2D layout model", "Flex-direction and axis alignment", "Grid template columns/rows", "Responsive breakpoints"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_02",
+        "stage": "technical",
+        "type": "technical",
+        "category": "JavaScript Fundamentals",
+        "skill": "JavaScript",
+        "topic": "Event Loop & Asynchronous Execution",
+        "question": "How does the JavaScript event loop manage execution between the call stack, Web APIs, the microtask queue (Promises), and the macrotask queue (setTimeout)?",
+        "difficulty": "easy",
+        "roles": ["web_developer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains single-threaded non-blocking runtime behavior",
+            "Explains how synchronous code runs to completion before queues are drained",
+            "Clarifies that the microtask queue has higher priority than macrotasks before rendering"
+        ],
+        "expected_concepts": ["Call stack", "Microtasks (Promises/queueMicrotask)", "Macrotasks (setTimeout/I/O)", "Event loop tick"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_03",
+        "stage": "technical",
+        "type": "technical",
+        "category": "React Fundamentals",
+        "skill": "React",
+        "topic": "Virtual DOM & Reconciliation",
+        "question": "How does React's virtual DOM reconciliation work, and why is it crucial to provide stable, unique 'key' props when rendering dynamic lists?",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Describes the diffing algorithm between previous and next virtual DOM trees",
+            "Explains how minimal real DOM mutations are batched for efficiency",
+            "Explains how index keys lead to state reconciliation bugs and unnecessary re-renders when list items are reordered or removed"
+        ],
+        "expected_concepts": ["Virtual DOM diffing algorithm", "Fiber architecture reconciliation", "Stable unique keys", "Component state retention"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_04",
+        "stage": "technical",
+        "type": "technical",
+        "category": "State Management",
+        "skill": "State Management",
+        "topic": "Local vs Global State Architecture",
+        "question": "Compare local component state (useState, useReducer) with global state solutions like Context API or Redux/Zustand. What architectural signs tell you it is time to lift state or introduce a global store?",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Recognizes prop drilling and deeply nested callbacks as symptoms requiring global state",
+            "Identifies re-render performance pitfalls of React Context for frequently changing data",
+            "Explains selector-based subscriptions in Zustand/Redux"
+        ],
+        "expected_concepts": ["Prop drilling", "Context re-rendering caveats", "Selectors & atomic state", "Server cache vs client UI state"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_05",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Browser Fundamentals",
+        "skill": "Browser Fundamentals",
+        "topic": "CORS & Preflight Requests",
+        "question": "What is Cross-Origin Resource Sharing (CORS), why do browsers enforce it, and what conditions trigger an HTTP preflight OPTIONS request?",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Clarifies that CORS is a browser security mechanism enforcing Same-Origin Policy",
+            "Identifies triggers for preflight OPTIONS (custom headers like Authorization, non-simple Content-Types like application/json, PUT/DELETE methods)",
+            "Explains essential server response headers (Access-Control-Allow-Origin, Allow-Headers)"
+        ],
+        "expected_concepts": ["Same-Origin Policy (SOP)", "Preflight OPTIONS request", "Access-Control headers", "Simple vs non-simple requests"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_06",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Web Performance",
+        "skill": "Web Performance",
+        "topic": "Core Web Vitals & Optimization",
+        "question": "How do you audit and improve web application performance focusing on Core Web Vitals (LCP, FID/INP, CLS)? What concrete optimizations address each metric?",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS)",
+            "Suggests asset optimization, lazy loading, and priority hints for LCP",
+            "Recommends explicit dimensions and font-display settings to prevent CLS",
+            "Advocates minimizing main thread JavaScript execution to maintain low INP"
+        ],
+        "expected_concepts": ["Largest Contentful Paint (LCP)", "Interaction to Next Paint (INP)", "Cumulative Layout Shift (CLS)", "Code splitting & image optimization"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_07",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Rendering Architecture",
+        "skill": "Web Architecture",
+        "topic": "CSR vs SSR vs SSG",
+        "question": "Analyze the trade-offs between Client-Side Rendering (CSR), Server-Side Rendering (SSR), and Static Site Generation (SSG). How do they affect Time to First Byte (TTFB), SEO, and server compute load?",
+        "difficulty": "hard",
+        "roles": ["web_developer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Compares initial HTML delivery speed and SEO indexability",
+            "Analyzes client hydration overhead and TTFB trade-offs",
+            "Identifies appropriate use cases: e.g. e-commerce product pages (SSG/ISR) vs authenticated dashboards (CSR)"
+        ],
+        "expected_concepts": ["Time to First Byte (TTFB)", "Client hydration cost", "Search engine indexing", "Incremental Static Regeneration (ISR)"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_TECH_08",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Web Security",
+        "skill": "Web Security",
+        "topic": "XSS, CSRF & Defense in Depth",
+        "question": "How do Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF) vulnerabilities operate in web applications, and what defense-in-depth mechanisms mitigate them?",
+        "difficulty": "hard",
+        "roles": ["web_developer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Differentiates stored vs reflected XSS and explains script injection into client DOM",
+            "Explains CSRF abusing authenticated session cookies across origin boundaries",
+            "Prescribes Content Security Policy (CSP), sanitized outputs, SameSite cookie attributes, and anti-CSRF tokens"
+        ],
+        "expected_concepts": ["Stored and Reflected XSS", "CSRF mechanics", "Content Security Policy (CSP)", "SameSite and httpOnly cookie flags"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 4: TECHNICAL - AI ENGINEER (8 questions) - Stage limit: 4
+    # Topics: LLMs, Prompt Design, Embeddings, RAG, AI APIs, Evaluation, Responsible AI
+    # =========================================================================
+    {
+        "question_id": "AI_TECH_01",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Prompt Engineering",
+        "skill": "Prompt Design",
+        "topic": "Zero-shot, Few-shot & Chain-of-Thought",
+        "question": "What are the core differences between zero-shot, few-shot, and chain-of-thought (CoT) prompting? When does each strategy produce the best performance in production?",
+        "difficulty": "easy",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines zero-shot as direct instruction and few-shot as providing in-context input-output examples",
+            "Explains that Chain-of-Thought prompts the model to generate intermediate reasoning steps",
+            "Understands context window trade-offs and when reasoning breakdown prevents calculation errors"
+        ],
+        "expected_concepts": ["Zero-shot instruction", "Few-shot in-context learning", "Chain-of-thought step-by-step reasoning", "Token overhead trade-offs"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_02",
+        "stage": "technical",
+        "type": "technical",
+        "category": "LLM Inference Parameters",
+        "skill": "LLM Hyperparameters",
+        "topic": "Temperature, Top_p & Max Tokens",
+        "question": "How do temperature, top_p (nucleus sampling), and max_tokens influence model output generation during LLM API inference? How would you configure them for data extraction versus creative writing?",
+        "difficulty": "easy",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains temperature scaling on the softmax logits (lower = more deterministic, higher = broader distribution)",
+            "Explains top_p capping the cumulative probability threshold of next-token candidates",
+            "Prescribes temperature 0.0 or near-zero with strict schema formatting for deterministic data extraction"
+        ],
+        "expected_concepts": ["Softmax logits scaling", "Nucleus sampling (top_p)", "Determinism vs hallucination risk", "Structured JSON extraction"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_03",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Semantic Search",
+        "skill": "Embeddings",
+        "topic": "Dense Embeddings vs Lexical Search",
+        "question": "What is a vector embedding in natural language processing, and how does semantic similarity search differ from traditional lexical keyword search like BM25?",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines embeddings as dense numerical vector representations capturing conceptual semantics",
+            "Contrasts keyword exact-matching (BM25/TF-IDF) with cosine distance search in latent space",
+            "Explains hybrid search combining sparse lexical indices with dense vector search for robust retrieval"
+        ],
+        "expected_concepts": ["Dense vector representations", "Cosine distance and dot product", "BM25 keyword search", "Hybrid search strategy"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_04",
+        "stage": "technical",
+        "type": "technical",
+        "category": "RAG Architecture",
+        "skill": "Retrieval-Augmented Generation",
+        "topic": "Chunking, Indexing & Context Injection",
+        "question": "Walk through the end-to-end architecture of a Retrieval-Augmented Generation (RAG) system. How do chunk size, chunk overlap, and metadata filtering impact retrieval precision and answer quality?",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Outlines ingestion pipeline (parse, chunk, embed, upsert to vector store) and query pipeline (embed, retrieve top-k, augment prompt, generate)",
+            "Analyzes trade-off: large chunks provide broader context but dilute specific facts; small chunks are precise but lose narrative continuity",
+            "Explains chunk overlap preventing truncated entities at boundary splits"
+        ],
+        "expected_concepts": ["Vector database indexing", "Chunking strategies & overlap", "Top-k nearest neighbor retrieval", "Prompt context injection"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_05",
+        "stage": "technical",
+        "type": "technical",
+        "category": "AI APIs & Tool Use",
+        "skill": "AI Tool Calling",
+        "topic": "Function Calling & Structured Outputs",
+        "question": "How does function calling (or tool use) work in modern LLM APIs? How does the runtime coordinate between the LLM's structured output and actual backend execution?",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains passing JSON Schema tool definitions in the API request",
+            "Clarifies that the model itself does NOT execute code, but emits structured JSON containing function name and arguments",
+            "Details application intercepting tool call, executing backend code, and injecting return value back into conversational history"
+        ],
+        "expected_concepts": ["JSON Schema tool definitions", "Model output structured parsing", "Client-side execution loop", "Multi-turn tool response handling"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_06",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Model Evaluation",
+        "skill": "AI Evaluation",
+        "topic": "RAG Triad & System Evaluation",
+        "question": "How do you evaluate the quality and reliability of a RAG pipeline in production? Describe the RAG Triad metrics: context relevance, groundedness/faithfulness, and answer relevance.",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines Context Relevance (did retriever fetch relevant docs?)",
+            "Defines Groundedness/Faithfulness (is the answer strictly supported by retrieved context without hallucination?)",
+            "Defines Answer Relevance (does the answer directly address the user prompt?)",
+            "Discusses automated evaluation frameworks (e.g. RAGAS, TruLens) using LLM-as-a-judge"
+        ],
+        "expected_concepts": ["Context relevance", "Faithfulness / Groundedness", "Answer relevance", "LLM-as-a-judge methodologies"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_07",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Responsible AI & Security",
+        "skill": "Responsible AI",
+        "topic": "Prompt Injection & Safety Guardrails",
+        "question": "What are direct and indirect prompt injection attacks against LLM-powered applications, and what defense-in-depth layers protect production AI systems against malicious manipulation?",
+        "difficulty": "hard",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Differentiates direct user prompt injection from indirect injection embedded in retrieved third-party documents",
+            "Identifies risks like data exfiltration, tool abuse, and guardrail bypass",
+            "Recommends input sanitization, separate privilege levels for system instructions, dual-LLM verification, and output safety classifiers (e.g. Llama Guard)"
+        ],
+        "expected_concepts": ["Direct vs indirect prompt injection", "Privilege boundaries", "Output validation guardrails", "System instruction isolation"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_TECH_08",
+        "stage": "technical",
+        "type": "technical",
+        "category": "AI Architecture Strategy",
+        "skill": "LLM Architecture",
+        "topic": "Fine-Tuning vs RAG Trade-offs",
+        "question": "Compare the architectural trade-offs between fine-tuning an open-source model versus using a frontier LLM with advanced RAG. When is fine-tuning truly required?",
+        "difficulty": "hard",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains RAG is superior for dynamic, proprietary, or frequently updating facts with traceable source attribution",
+            "Explains fine-tuning is needed for teaching specialized tone, style, structured formatting, or niche domain vocabulary",
+            "Evaluates operational costs: fine-tuning requires dataset curation, training compute, and custom serving; RAG incurs higher prompt token costs"
+        ],
+        "expected_concepts": ["Knowledge retrieval vs behavioral alignment", "LoRA / PEFT fine-tuning mechanics", "Inference latency and token economics", "Source provenance and hallucinations"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 4: TECHNICAL - MACHINE LEARNING ENGINEER (8 questions) - Stage limit: 4
+    # Topics: Supervised/Unsupervised, Feature Engineering, Overfitting, Validation, Metrics, Deployment, Drift
+    # =========================================================================
+    {
+        "question_id": "ML_TECH_01",
+        "stage": "technical",
+        "type": "technical",
+        "category": "ML Fundamentals",
+        "skill": "ML Paradigms",
+        "topic": "Supervised vs Unsupervised Learning",
+        "question": "What is the foundational difference between supervised, unsupervised, and semi-supervised machine learning? Give a concrete industry use case for each paradigm.",
+        "difficulty": "easy",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Differentiates training with ground-truth target labels vs discovering underlying latent patterns in unlabeled data",
+            "Explains semi-supervised learning leveraging abundant unlabeled data with a small labeled seed",
+            "Provides clear examples (e.g. churn prediction, customer segmentation, medical image labeling)"
+        ],
+        "expected_concepts": ["Labeled vs unlabeled data", "Classification / Regression", "Clustering / Dimensionality reduction", "Pseudo-labeling"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_02",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Overfitting & Bias-Variance",
+        "skill": "Model Validation",
+        "topic": "Bias-Variance Tradeoff",
+        "question": "Explain the bias-variance tradeoff. How do you diagnose high bias versus high variance using training and validation loss curves, and what techniques alleviate each?",
+        "difficulty": "easy",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Identifies high bias as underfitting (high training and validation error) and high variance as overfitting (low training error, high validation error)",
+            "Remedies for high bias: more complex models, additional features, less regularization",
+            "Remedies for high variance: more data, feature selection, regularization (L1/L2, dropout), data augmentation"
+        ],
+        "expected_concepts": ["Underfitting vs Overfitting", "Generalization gap", "Loss curve diagnosis", "Regularization strategies"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_03",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Feature Engineering",
+        "skill": "Feature Engineering",
+        "topic": "Preprocessing & Data Leakage",
+        "question": "How do you handle missing values, high-cardinality categorical variables, and numerical features with wide ranges? Why must feature scaling be fit exclusively on training splits?",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains imputation techniques (median, mode, model-based KNN) and one-hot vs target encoding",
+            "Understands Min-Max vs Standard Z-score scaling for gradient descent and distance-based models",
+            "Explicitly identifies data leakage: fitting scalers on the full dataset leaks test distribution information into the model"
+        ],
+        "expected_concepts": ["Data leakage prevention", "Categorical target encoding", "Z-score normalization", "Train-test partition isolation"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_04",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Model Evaluation",
+        "skill": "Evaluation Metrics",
+        "topic": "Imbalanced Classification Metrics",
+        "question": "In a severe class imbalance scenario (such as fraud detection where 99.8% of cases are legitimate), why is accuracy a misleading metric? Contrast Precision, Recall, F1-Score, and ROC-AUC.",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains accuracy paradox: a naive dummy classifier predicting all zeros achieves 99.8% accuracy while catching zero fraud",
+            "Defines Precision (TP / (TP + FP)) and Recall (TP / (TP + FN)) and their inherent trade-off",
+            "Explains F1-score as harmonic mean penalizing extreme imbalances",
+            "Contrasts ROC-AUC (insensitive to class distribution) with Precision-Recall AUC (critical for rare positive detection)"
+        ],
+        "expected_concepts": ["Accuracy paradox", "Precision vs Recall tradeoff", "False Positive vs False Negative business costs", "PR-AUC vs ROC-AUC"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_05",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Model Validation",
+        "skill": "Cross-Validation",
+        "topic": "Stratified K-Fold & Time-Series Splits",
+        "question": "When and why should you use Stratified K-Fold cross-validation instead of standard K-Fold? How does validation strategy differ fundamentally when working with time-series data?",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains Stratified K-Fold preserves percentage of samples for each class in every fold",
+            "Identifies look-ahead bias in time-series: shuffling random folds leaks future information into past predictions",
+            "Prescribes forward-chaining / expanding window cross-validation (TimeSeriesSplit) for temporal sequences"
+        ],
+        "expected_concepts": ["Class distribution preservation", "Look-ahead bias / temporal leakage", "Rolling window cross-validation", "Out-of-fold predictions"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_06",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Optimization & Regularization",
+        "skill": "Regularization",
+        "topic": "L1 (Lasso) vs L2 (Ridge) Mechanics",
+        "question": "What is the mathematical and geometric difference between L1 (Lasso) and L2 (Ridge) regularization? Why does L1 regularization drive feature weights to exact zero?",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains L1 adds absolute weight penalty sum(|w|) and L2 adds squared weight penalty sum(w^2)",
+            "Explains geometric diamond shape of L1 constraint contour intersecting loss contours at coordinate axes",
+            "Identifies L1 as an automated feature selector producing sparse models"
+        ],
+        "expected_concepts": ["L1 absolute norm vs L2 squared norm", "Sparsity induction", "Geometric constraint intersection", "ElasticNet combination"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_07",
+        "stage": "technical",
+        "type": "technical",
+        "category": "MLOps & Deployment",
+        "skill": "Model Serving",
+        "topic": "Low-Latency Model Serving & Optimization",
+        "question": "What techniques optimize deep learning or tabular model inference latency in production? Discuss ONNX runtime conversion, quantization (FP16/INT8), and batching strategies.",
+        "difficulty": "hard",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains graph compilation and operator fusion via ONNX or TensorRT",
+            "Explains post-training quantization reducing precision to INT8 with minimal accuracy loss while reducing memory bandwidth",
+            "Discusses dynamic server-side batching balancing throughput and individual request latency"
+        ],
+        "expected_concepts": ["ONNX runtime graph optimization", "Weight quantization (INT8/FP16)", "Dynamic batching vs single-item latency", "GPU/CPU memory bandwidth limits"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_TECH_08",
+        "stage": "technical",
+        "type": "technical",
+        "category": "MLOps Monitoring",
+        "skill": "Model Monitoring",
+        "topic": "Data Drift & Concept Drift",
+        "question": "How do you detect data drift and concept drift in production ML systems? What statistical tests (e.g. KS-test, PSI) quantify distribution shifts, and how do you design automated retraining?",
+        "difficulty": "hard",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Differentiates covariate/data drift P(X) from concept drift P(Y|X)",
+            "Explains statistical tests: Kolmogorov-Smirnov test for continuous features, Population Stability Index (PSI) for categorical bins",
+            "Outlines automated alert thresholds, shadow deployments, canary model releases, and safe fallback logic"
+        ],
+        "expected_concepts": ["Covariate shift vs concept drift", "Population Stability Index (PSI)", "Kolmogorov-Smirnov (KS) test", "Canary deployment & automated retraining"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 4: TECHNICAL - DATA ENGINEER (8 questions) - Stage limit: 4
+    # Topics: SQL, ETL/ELT, Data Modeling, Orchestration, Data Quality, Distributed Processing, Warehouses
+    # =========================================================================
+    {
+        "question_id": "DATA_ENG_TECH_01",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Relational Modeling",
+        "skill": "Database Normalization",
+        "topic": "1NF, 2NF, 3NF vs Denormalization",
+        "question": "Explain database normalization up to Third Normal Form (3NF). Why do analytical data warehouses (OLAP) intentionally denormalize data that transactional systems (OLTP) keep normalized?",
+        "difficulty": "easy",
+        "roles": ["data_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines 1NF (atomic columns), 2NF (no partial key dependencies), 3NF (no transitive dependencies)",
+            "Explains OLTP prioritizes fast single-row writes, minimal redundancy, and transaction integrity",
+            "Explains OLAP denormalizes into wide tables or dimensional stars to eliminate expensive multi-table joins during massive scans"
+        ],
+        "expected_concepts": ["1NF, 2NF, 3NF definitions", "Write anomalies vs Read throughput", "OLTP vs OLAP workloads", "Denormalization benefits in analytical warehouses"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_02",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Pipeline Architecture",
+        "skill": "Data Pipelines",
+        "topic": "ETL vs ELT Paradigms",
+        "question": "What is the architectural distinction between traditional ETL (Extract, Transform, Load) and modern ELT (Extract, Load, Transform)? What cloud innovations accelerated the transition to ELT?",
+        "difficulty": "easy",
+        "roles": ["data_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains ETL transforms data on dedicated middleware prior to storage, while ELT dumps raw data directly into the warehouse and executes SQL transforms in-database",
+            "Highlights cloud data warehouses (Snowflake, BigQuery) with decoupled compute and storage enabling scalable in-warehouse processing",
+            "Mentions tools like dbt transforming data after loading"
+        ],
+        "expected_concepts": ["Separation of compute and storage", "Raw data preservation (data lake/warehouse)", "Transformation via SQL/dbt", "Compute resource scalability"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_03",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Data Modeling",
+        "skill": "Dimensional Modeling",
+        "topic": "Star Schema vs Snowflake Schema",
+        "question": "Compare Star schema with Snowflake schema in dimensional data modeling. Explain the purpose of Fact tables, Dimension tables, and Surrogate keys.",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains Fact tables contain quantitative business metrics and foreign keys to dimensions",
+            "Explains Star schema keeps dimension tables denormalized for simpler queries, while Snowflake normalizes sub-dimensions",
+            "Explains surrogate keys isolate the data warehouse from operational source primary key updates and handle slowly changing dimensions"
+        ],
+        "expected_concepts": ["Fact tables and Dimension tables", "Denormalized Star schema", "Normalized Snowflake schema", "Surrogate keys & SCD management"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_04",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Pipeline Orchestration",
+        "skill": "Orchestration",
+        "topic": "Idempotency & Airflow DAGs",
+        "question": "What does it mean for a data pipeline to be idempotent, and why is idempotency essential when orchestrating tasks with tools like Apache Airflow during retries or backfills?",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines idempotency: running the pipeline multiple times on the same input produces the exact same end state without duplicate data",
+            "Contrasts naive `INSERT INTO` (which duplicates data on retry) with `UPSERT` or partition replacement (`INSERT OVERWRITE`)",
+            "Explains Airflow execution date logical intervals enabling historical backfilling safely"
+        ],
+        "expected_concepts": ["Idempotent operations", "UPSERT / Partition overwrite patterns", "Airflow execution_date intervals", "Backfill safety without duplicates"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_05",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Data Quality",
+        "skill": "Data Quality",
+        "topic": "Automated Validation & Dead-Letter Queues",
+        "question": "How do you design automated data quality checks within high-throughput ingestion pipelines? Describe how dead-letter queues (DLQs) isolate corrupt or schema-violating records.",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Outlines pre-ingestion schema validation, null checks, range checks, and uniqueness tests",
+            "Explains routing failed records to a Dead-Letter Queue (e.g. S3 quarantine bucket or Kafka DLQ topic) so healthy batches proceed uninterrupted",
+            "Discusses alerting, re-processing playbooks, and monitoring DLQ ingestion rates"
+        ],
+        "expected_concepts": ["Schema enforcement & evolution", "Quarantine / Dead-letter queues", "Non-blocking batch processing", "Automated anomaly alerting"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_06",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Data Warehousing",
+        "skill": "Columnar Databases",
+        "topic": "Partitioning, Clustering & Columnar Formats",
+        "question": "Explain how columnar storage formats (like Parquet) and table partitioning/clustering (in Snowflake or BigQuery) drastically reduce query scan volume, execution time, and cloud cost.",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains columnar storage reads only requested columns, skipping unprojected fields completely",
+            "Explains partition pruning skipping entire micro-partitions/directories based on WHERE filters (e.g. date ranges)",
+            "Explains clustering sorting data within partitions to maximize min-max metadata filtering"
+        ],
+        "expected_concepts": ["Columnar projection vs row storage", "Partition pruning", "Clustering keys and min-max metadata", "Parquet/ORC compression benefits"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_07",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Distributed Computing",
+        "skill": "Apache Spark",
+        "topic": "Spark Shuffling & Broadcast Joins",
+        "question": "In distributed computing engines like Apache Spark, what causes data shuffle, why is it expensive, and how do broadcast joins, repartitioning, and coalesce mitigate shuffle bottlenecks?",
+        "difficulty": "hard",
+        "roles": ["data_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Identifies wide transformations (groupByKey, join, distinct) requiring data exchange across cluster network",
+            "Explains broadcast hash join distributing a small lookup table to all worker nodes to turn a wide join into a local narrow join",
+            "Differentiates `repartition` (full shuffle to change partition count) from `coalesce` (combines local partitions without full shuffle)"
+        ],
+        "expected_concepts": ["Wide vs narrow transformations", "Network I/O shuffle cost", "Broadcast hash join optimization", "Repartition vs Coalesce"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DATA_ENG_TECH_08",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Streaming Architecture",
+        "skill": "Stream Processing",
+        "topic": "Kafka Delivery Guarantees & Ordering",
+        "question": "How does Apache Kafka guarantee message ordering, and what are the trade-offs between at-most-once, at-least-once, and exactly-once processing (EOS) semantics in stream ingestion?",
+        "difficulty": "hard",
+        "roles": ["data_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains message ordering is guaranteed strictly within individual partitions, controlled by partition keys",
+            "Contrasts at-most-once (commit offset before processing; risk message loss) with at-least-once (commit after processing; risk duplicates)",
+            "Details exactly-once via idempotent producers and transactional commits across Kafka and downstream storage"
+        ],
+        "expected_concepts": ["Partition key hashing", "Offset commit semantics", "Idempotent producers", "Transactional two-phase commits in streams"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 4: TECHNICAL - BACKEND DEVELOPER (8 questions) - Stage limit: 4
+    # Topics: API Design, HTTP, Auth, Databases, Transactions, Caching, Error Handling, Scalability
+    # =========================================================================
+    {
+        "question_id": "BE_TECH_01",
+        "stage": "technical",
+        "type": "technical",
+        "category": "API Design",
+        "skill": "REST APIs",
+        "topic": "RESTful Principles & Status Codes",
+        "question": "What principles define a truly RESTful API architecture? Explain HTTP method idempotency and explain the exact differences between status codes 401 Unauthorized and 403 Forbidden.",
+        "difficulty": "easy",
+        "roles": ["backend_developer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Identifies statelessness, resource-oriented URIs, and standard HTTP verbs",
+            "Defines idempotency (GET, PUT, DELETE produce same server state upon repetition; POST creates new resources)",
+            "Explains 401 means unauthenticated (identity unknown / missing token) and 403 means authenticated but unauthorized (identity known, but lacking permission)"
+        ],
+        "expected_concepts": ["Stateless resource modeling", "Method idempotency (PUT vs POST)", "401 Unauthenticated vs 403 Forbidden", "HTTP status code semantics"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_02",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Database Indexing",
+        "skill": "SQL & Indexing",
+        "topic": "B-Tree Indexes & Write Overhead",
+        "question": "How do B-tree indexes accelerate database queries, and what performance trade-offs occur when adding too many indexes to a high-throughput table?",
+        "difficulty": "easy",
+        "roles": ["backend_developer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains logarithmic O(log N) balanced tree lookups vs full table scans O(N)",
+            "Explains composite indexes and the leftmost prefix rule",
+            "Identifies write performance degradation: every INSERT, UPDATE, and DELETE must synchronously rebalance all corresponding table index trees"
+        ],
+        "expected_concepts": ["B-tree balanced search tree", "Full table scan vs index seek", "Leftmost prefix rule", "Write amplification on inserts/updates"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_03",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Authentication",
+        "skill": "Authentication",
+        "topic": "JWT vs Session-Based Auth",
+        "question": "Compare JSON Web Tokens (JWT) for stateless authentication with traditional server-side session cookies. How do you safely handle immediate token revocation in a JWT architecture?",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Breaks down JWT structure: Header, Payload, Signature verified with a secret or public key",
+            "Explains stateless benefits (no server session lookup) vs difficulty of immediate invalidation before expiry",
+            "Proposes hybrid revocation techniques: short-lived access tokens paired with refresh tokens, or a fast Redis revocation blocklist"
+        ],
+        "expected_concepts": ["JWT Header, Payload, Signature", "Stateless horizontal scaling", "Token revocation challenge", "Refresh token rotation and Redis blocklists"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_04",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Database Transactions",
+        "skill": "Relational Databases",
+        "topic": "ACID Properties & Isolation Levels",
+        "question": "Explain the ACID properties of relational databases. What are dirty reads, non-repeatable reads, and phantom reads, and how do standard transaction isolation levels prevent them?",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines Atomicity, Consistency, Isolation, Durability",
+            "Defines Dirty Read (uncommitted data read), Non-repeatable Read (row value changes on second read), Phantom Read (new rows appear in range)",
+            "Maps isolation levels: Read Uncommitted, Read Committed, Repeatable Read, Serializable with lock contention trade-offs"
+        ],
+        "expected_concepts": ["ACID transaction semantics", "Dirty vs Non-repeatable vs Phantom reads", "Isolation levels trade-offs", "Concurrency locking vs MVCC"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_05",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Caching Architecture",
+        "skill": "Caching",
+        "topic": "Cache-Aside, Invalidation & Cache Stampede",
+        "question": "Explain the Cache-Aside pattern using Redis. What is the cache stampede (or thundering herd) problem when an item expires, and what strategies mitigate it?",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains Cache-Aside flow: check cache; on miss, query database, store in cache with TTL, return to client",
+            "Identifies cache stampede: popular key expires, causing thousands of concurrent requests to hammer the database simultaneously",
+            "Mitigations: distributed mutex locks, probabilistic early expiration (XFetch), or background pre-warming"
+        ],
+        "expected_concepts": ["Cache-Aside read/write lifecycle", "TTL expiration policies", "Thundering herd / Cache stampede", "Distributed locking (e.g. Redlock)"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_06",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Concurrency & Locking",
+        "skill": "Concurrency",
+        "topic": "Optimistic vs Pessimistic Concurrency Control",
+        "question": "How do you handle race conditions when two concurrent requests try to debit the same bank balance or claim the last inventory item? Compare optimistic locking with pessimistic locking.",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains pessimistic locking uses row-level database locks (`SELECT ... FOR UPDATE`), blocking other transactions until commit",
+            "Explains optimistic locking uses version or timestamp columns, checking `WHERE version = current_version` on update and aborting/retrying if changed",
+            "Chooses based on conflict probability: optimistic for low contention, pessimistic for high contention to avoid retry storms"
+        ],
+        "expected_concepts": ["Race conditions in financial/inventory updates", "Pessimistic locking (SELECT FOR UPDATE)", "Optimistic locking (versioning)", "Deadlock avoidance"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_07",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Distributed Systems",
+        "skill": "System Architecture",
+        "topic": "Distributed Consistency & Saga Pattern",
+        "question": "In a distributed microservices architecture where services maintain separate databases, how do you handle transactions without two-phase commit? Explain the Saga pattern (choreography vs orchestration).",
+        "difficulty": "hard",
+        "roles": ["backend_developer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains limitations of 2PC (blocking, latency, availability bottlenecks in distributed networks)",
+            "Explains Saga as a sequence of local transactions where each step publishes an event",
+            "Explains compensating transactions that execute reverse actions if an intermediate step fails",
+            "Differentiates event-driven Choreography (decentralized) from centralized Orchestration"
+        ],
+        "expected_concepts": ["Eventual consistency", "Compensating transactions", "Choreography vs Orchestration", "Idempotent event consumers"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_TECH_08",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Scalability & Resilience",
+        "skill": "Scalability",
+        "topic": "Rate Limiting & Circuit Breakers",
+        "question": "How do rate limiting algorithms (Token Bucket, Sliding Window Counter) and Circuit Breakers protect backend architectures from cascading failures and service exhaustion?",
+        "difficulty": "hard",
+        "roles": ["backend_developer"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Compares Token Bucket (allows bursts up to capacity) with Sliding Window Counter in Redis (smooth exact limiting)",
+            "Explains Circuit Breaker states: Closed (normal), Open (fast fail without downstream requests), Half-Open (trial probe requests)",
+            "Prevents cascading exhaustion of connection pools and worker threads across dependent microservices"
+        ],
+        "expected_concepts": ["Token Bucket vs Sliding Window Counter", "Circuit Breaker states (Closed, Open, Half-Open)", "Cascading failure mitigation", "Fast failure & fallback responses"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 4: TECHNICAL - DATA ANALYST (8 questions) - Stage limit: 4
+    # Topics: SQL, Data Cleaning, Statistics, EDA, Visualization, KPI Design, Insights
+    # =========================================================================
+    {
+        "question_id": "DA_TECH_01",
+        "stage": "technical",
+        "type": "technical",
+        "category": "SQL Fundamentals",
+        "skill": "SQL",
+        "topic": "WHERE vs HAVING & Evaluation Order",
+        "question": "What is the critical operational difference between the WHERE and HAVING clauses in SQL? In what logical order does the database engine evaluate SQL clauses?",
+        "difficulty": "easy",
+        "roles": ["data_analyst"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains WHERE filters individual rows before aggregation occurs, while HAVING filters aggregated groups after GROUP BY",
+            "Lists logical order of operations: FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> DISTINCT -> ORDER BY -> LIMIT",
+            "Explains why column aliases created in SELECT cannot be referenced in WHERE"
+        ],
+        "expected_concepts": ["Row filtering vs group aggregation", "WHERE vs HAVING execution placement", "SQL logical query execution order", "Aggregate functions (COUNT, SUM, AVG)"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_02",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Data Cleaning & Preprocessing",
+        "skill": "Data Cleaning",
+        "topic": "Data Cleaning & Outlier Detection",
+        "question": "What systematic methodology do you follow to clean and validate a raw dataset containing missing values, inconsistent text, duplicates, and extreme outliers?",
+        "difficulty": "easy",
+        "roles": ["data_analyst"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains profiling data types, uniqueness, and null distributions",
+            "Discusses outlier detection via Interquartile Range (IQR) or Z-score and decisions on whether to cap, impute, or drop",
+            "Considers business context before blindly discarding anomalies"
+        ],
+        "expected_concepts": ["Data profiling", "Null handling (imputation vs removal)", "IQR and Z-score outlier detection", "String normalization & deduplication"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_03",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Advanced SQL",
+        "skill": "SQL Window Functions",
+        "topic": "ROW_NUMBER vs RANK vs DENSE_RANK",
+        "question": "Explain the differences between ROW_NUMBER(), RANK(), and DENSE_RANK() in SQL window functions. How does the OVER (PARTITION BY ... ORDER BY ...) clause operate?",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["beginner", "intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains ROW_NUMBER assigns sequential unique integers regardless of ties",
+            "Explains RANK assigns same rank to ties and skips subsequent numbers (e.g. 1, 2, 2, 4)",
+            "Explains DENSE_RANK assigns same rank to ties without skipping numbers (e.g. 1, 2, 2, 3)",
+            "Understands PARTITION BY groups data for the calculation without collapsing rows like GROUP BY"
+        ],
+        "expected_concepts": ["Tie handling in rankings", "Window function partitioning", "Non-aggregating analytical calculations", "Top-N per group queries"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_04",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Applied Statistics",
+        "skill": "Statistical Analysis",
+        "topic": "Correlation vs Causation & Confounding",
+        "question": "What is the difference between correlation and causation? Describe a business scenario where two metrics appeared strongly correlated but were actually influenced by a confounding variable.",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains correlation measures statistical co-movement, whereas causation requires one variable directly altering the other",
+            "Identifies confounding variables (e.g. seasonality, promotional spikes) creating spurious relationships",
+            "Suggests controlled experimentation (A/B testing) or segmentation to verify genuine causality"
+        ],
+        "expected_concepts": ["Pearson/Spearman correlation coefficients", "Confounding variables / Spurious correlation", "Controlled experimentation", "Causal inference basics"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_05",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Business Metrics & KPIs",
+        "skill": "KPI Design",
+        "topic": "Customer Churn, LTV & Vanity Metrics",
+        "question": "How do you calculate and interpret Customer Churn Rate, Customer Acquisition Cost (CAC), and Customer Lifetime Value (LTV)? What makes a metric 'actionable' versus a 'vanity metric'?",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["intermediate"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines formulas: Churn = churned users / total start users; LTV / CAC ratio healthy benchmark (e.g. 3:1)",
+            "Contrasts vanity metrics (e.g. total cumulative app downloads, page views) that look good but provide no direction",
+            "Explains actionable metrics that tie directly to user retention, revenue, and product iteration decisions"
+        ],
+        "expected_concepts": ["Customer Churn formula", "LTV / CAC ratio economics", "Actionable vs vanity metrics", "Cohort segmentation of metrics"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_06",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Data Visualization",
+        "skill": "Data Visualization",
+        "topic": "Dashboard Design & Chart Selection",
+        "question": "When designing an executive dashboard, how do you decide which chart types to choose (e.g. bar charts, line graphs, scatter plots, heatmaps)? What visual principles prevent misleading stakeholders?",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Maps chart types: line charts for time-series trends, bar charts for discrete categorical comparisons, scatter plots for correlations",
+            "Highlights integrity principles: zero-baseline axes for bar charts, avoiding 3D charts, clear labeling, decluttering",
+            "Organizes layout with high-level summary KPIs at top cascading to detailed breakdowns"
+        ],
+        "expected_concepts": ["Visual hierarchy in dashboards", "Appropriate chart-to-data mapping", "Zero-baseline integrity", "Cognitive load reduction"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_07",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Experimentation",
+        "skill": "Hypothesis Testing",
+        "topic": "A/B Testing Methodology & p-values",
+        "question": "Walk through the statistical design of an A/B test. How do you determine necessary sample size, set statistical power and significance thresholds (alpha), and interpret p-values without falling into early-stopping traps?",
+        "difficulty": "hard",
+        "roles": ["data_analyst"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Defines Null Hypothesis (H0) and Alternative Hypothesis (H1)",
+            "Explains sample size calculation based on baseline conversion, Minimum Detectable Effect (MDE), statistical power (1 - beta = 80%), and alpha (5%)",
+            "Defines p-value: probability of observing data at least as extreme assuming H0 is true",
+            "Explains the peeking problem inflating Type I false positives when monitoring tests continuously without correction"
+        ],
+        "expected_concepts": ["Type I error (alpha) vs Type II error (beta)", "Statistical power and MDE", "Sample size estimation", "The continuous peeking problem"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_TECH_08",
+        "stage": "technical",
+        "type": "technical",
+        "category": "Advanced Analytics",
+        "skill": "Exploratory Analysis",
+        "topic": "Cohort Retention & Funnel Analysis",
+        "question": "How do you construct a cohort retention analysis and a conversion funnel analysis to diagnose product friction? How do you effectively present these findings to product managers and executives?",
+        "difficulty": "hard",
+        "roles": ["data_analyst"],
+        "experience_levels": ["advanced"],
+        "is_coding": False,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Explains grouping users by signup or acquisition month/week and tracking retention percentages across subsequent periods",
+            "Analyzes funnel stages step-by-step to isolate drop-off drop rates",
+            "Translates drop-off metrics into concrete dollar-value business opportunities or targeted UI recommendations for stakeholders"
+        ],
+        "expected_concepts": ["Cohort retention matrix heatmap", "Multi-step conversion funnel drop-off", "User segmentation by behavior", "Translating analytics into business strategy"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 5: CODING / PROBLEM-SOLVING (18 questions: 3 per role) - Stage limit: 1
+    # =========================================================================
+    # --- Web Developer Coding ---
+    {
+        "question_id": "WEB_CODE_01",
+        "stage": "coding",
+        "type": "coding",
+        "category": "JavaScript Array Manipulation",
+        "skill": "JavaScript",
+        "topic": "Unique Tag Extraction",
+        "question": "Write a JavaScript function that takes an array of blog post objects—each with an 'id', 'title', and an array of 'tags'—and returns a sorted array of all unique tags with no duplicates.",
+        "difficulty": "easy",
+        "roles": ["web_developer"],
+        "experience_levels": ["beginner"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Flattens nested tag arrays using flatMap, reduce, or iteration",
+            "Deduplicates tags using Set or filter",
+            "Returns array sorted alphabetically"
+        ],
+        "expected_concepts": ["Array.prototype.flatMap or reduce", "Set deduplication", "Array.prototype.sort", "Immutability"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "WEB_CODE_02",
+        "stage": "coding",
+        "type": "coding",
+        "category": "JavaScript Utilities",
+        "skill": "JavaScript",
+        "topic": "Debounce Function Implementation",
+        "question": "Implement a reusable 'debounce' function in JavaScript that takes a callback function and a delay in milliseconds. Explain how closures and clearTimeout prevent rapid successive executions during typing.",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Returns a higher-order wrapper function",
+            "Maintains a timer reference in closure scope",
+            "Clears active timeout on each invocation and restarts delay",
+            "Preserves execution context and arguments"
+        ],
+        "expected_concepts": ["Higher-order functions", "Closures & timer state", "clearTimeout / setTimeout", "Preserving 'this' and arguments"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "WEB_CODE_03",
+        "stage": "coding",
+        "type": "coding",
+        "category": "JavaScript Data Structures",
+        "skill": "JavaScript",
+        "topic": "Deep Clone Implementation",
+        "question": "Write a JavaScript function to perform a deep clone of a nested object without using JSON.parse(JSON.stringify()). How do you handle nested objects, arrays, and primitive values cleanly?",
+        "difficulty": "hard",
+        "roles": ["web_developer"],
+        "experience_levels": ["advanced"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Handles primitive types, null, and undefined as base cases",
+            "Distinguishes between arrays and plain objects",
+            "Recursively clones nested keys without mutating original references",
+            "Discusses edge cases like circular references or dates"
+        ],
+        "expected_concepts": ["Recursive object traversal", "Array.isArray vs typeof object", "Avoiding reference mutation", "Base-case termination"],
+        "follow_up_enabled": False
+    },
+
+    # --- AI Engineer Coding ---
+    {
+        "question_id": "AI_CODE_01",
+        "stage": "coding",
+        "type": "coding",
+        "category": "NLP Preprocessing",
+        "skill": "Python NLP",
+        "topic": "Text Chunking with Overlap",
+        "question": "Implement a Python function 'chunk_text(text, chunk_size, overlap)' that splits a string of text into words and returns a list of string chunks, where each chunk contains up to 'chunk_size' words with 'overlap' words shared with the previous chunk.",
+        "difficulty": "easy",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["beginner"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Splits text into word tokens",
+            "Advances window index by step = (chunk_size - overlap)",
+            "Correctly handles termination when remaining words are fewer than chunk_size",
+            "Validates that chunk_size > overlap >= 0"
+        ],
+        "expected_concepts": ["Sliding window indexing", "Word tokenization", "Boundary condition handling", "Overlap validation"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "AI_CODE_02",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Vector Mathematics",
+        "skill": "Python Algorithms",
+        "topic": "Cosine Similarity Calculation",
+        "question": "Write a Python function 'cosine_similarity(vec_a, vec_b)' that computes the cosine similarity between two numerical embedding vectors from scratch without using external machine learning libraries.",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Computes dot product: sum(a_i * b_i)",
+            "Computes Euclidean norms (L2 magnitude): sqrt(sum(x_i^2))",
+            "Includes safety check against division by zero for zero vectors",
+            "Returns normalized float between -1.0 and 1.0"
+        ],
+        "expected_concepts": ["Dot product calculation", "Vector L2 magnitude", "Zero division protection", "Mathematical accuracy"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "AI_CODE_03",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Context Management",
+        "skill": "RAG Algorithms",
+        "topic": "Context Window Token Budgeting",
+        "question": "Write a Python function 'budget_context(documents, max_token_limit)' where each document is a dict with 'id', 'content', 'tokens', and 'relevance_score'. Select the highest-scoring documents that fit strictly within max_token_limit and return them ordered by relevance.",
+        "difficulty": "hard",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Sorts candidate documents by relevance_score descending",
+            "Greedily accumulates documents while tracking total tokens <= max_token_limit",
+            "Does not exceed budget",
+            "Returns selected documents with remaining budget statistics"
+        ],
+        "expected_concepts": ["Greedy selection / Knapsack heuristic", "Token budget accounting", "Sorting by custom key", "Edge case handling (empty list, large docs)"],
+        "follow_up_enabled": False
+    },
+
+    # --- Machine Learning Engineer Coding ---
+    {
+        "question_id": "ML_CODE_01",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Feature Scaling",
+        "skill": "Python ML",
+        "topic": "Min-Max Normalization",
+        "question": "Write a Python function 'min_max_scale(values)' that takes a list of numerical values and scales each value between 0.0 and 1.0. How do you handle edge cases where all numbers in the list are identical?",
+        "difficulty": "easy",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["beginner"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Finds minimum and maximum values in list",
+            "Applies formula: (x - min) / (max - min)",
+            "Guards against zero-division when max == min by returning list of zeros or 0.5s",
+            "Returns correctly scaled list of floats"
+        ],
+        "expected_concepts": ["Min-max normalization formula", "Zero division edge case", "List comprehension", "Float precision"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "ML_CODE_02",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Evaluation Metrics",
+        "skill": "Python ML",
+        "topic": "Confusion Matrix & F1-Score",
+        "question": "Implement a Python function 'evaluate_predictions(y_true, y_pred)' that takes two lists of binary labels (0 and 1) and computes True Positives, False Positives, True Negatives, False Negatives, Precision, Recall, and F1-score without using scikit-learn.",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Iterates through zip(y_true, y_pred) counting TP, FP, TN, FN correctly",
+            "Computes Precision = TP / (TP + FP) with zero-division safeguard",
+            "Computes Recall = TP / (TP + FN) with zero-division safeguard",
+            "Computes F1 = 2 * (Precision * Recall) / (Precision + Recall) with safeguard"
+        ],
+        "expected_concepts": ["Confusion matrix tabulation", "Precision and Recall formulas", "F1 harmonic mean", "Zero division guards"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "ML_CODE_03",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Clustering Algorithms",
+        "skill": "Python ML",
+        "topic": "K-Means Assignment Step",
+        "question": "Write a Python function that implements the assignment step of K-Means: given a list of 2D data points [(x1, y1), ...] and K cluster centroids [(cx1, cy1), ...], assign each point to its nearest centroid based on Euclidean distance.",
+        "difficulty": "hard",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Calculates Euclidean distance sqrt((x-cx)^2 + (y-cy)^2) between each point and all centroids",
+            "Identifies index of nearest centroid for each point",
+            "Returns structured clusters dict or list of cluster assignments",
+            "Efficient distance comparison without redundant square roots"
+        ],
+        "expected_concepts": ["Euclidean distance metric", "K-Means assignment logic", "Index mapping", "Algorithmic efficiency"],
+        "follow_up_enabled": False
+    },
+
+    # --- Data Engineer Coding ---
+    {
+        "question_id": "DATA_ENG_CODE_01",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Data Aggregation",
+        "skill": "Python Data Structures",
+        "topic": "User Transaction Aggregator",
+        "question": "Write a Python function that takes a list of transaction records [{'user_id': str, 'amount': float, 'category': str}, ...] and returns a summary dictionary mapping each user_id to their total spend and transaction count.",
+        "difficulty": "easy",
+        "roles": ["data_engineer"],
+        "experience_levels": ["beginner"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Iterates through records cleanly",
+            "Uses dict.setdefault or collections.defaultdict to initialize user entries",
+            "Accumulates sum of amounts and increments count correctly",
+            "Returns clean aggregated structure"
+        ],
+        "expected_concepts": ["Dictionary aggregation", "Defaultdict pattern", "Single-pass O(N) efficiency", "Handling missing or dirty fields"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "DATA_ENG_CODE_02",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Stream Processing",
+        "skill": "Python Algorithms",
+        "topic": "Sliding Window Deduplicator",
+        "question": "Implement a Python class 'EventDeduplicator' with a method 'process_event(event_id, timestamp)' that returns True if the event is unique and False if it is a duplicate within a 60-second sliding window, evicting expired events to prevent memory leaks.",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Maintains mapping or queue of seen events with timestamps",
+            "Evicts events with timestamps older than (current_timestamp - window_seconds)",
+            "Checks membership in O(1) time",
+            "Correctly bounds memory usage as events arrive"
+        ],
+        "expected_concepts": ["Sliding window state management", "Memory leak prevention via eviction", "O(1) lookup with hash maps/deques", "Event deduplication logic"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "DATA_ENG_CODE_03",
+        "stage": "coding",
+        "type": "coding",
+        "category": "DAG Orchestration",
+        "skill": "Graph Algorithms",
+        "topic": "Pipeline DAG Cycle Detection",
+        "question": "Write a Python function 'validate_dag(tasks, dependencies)' where dependencies is a list of tuples (upstream_task, downstream_task). Determine whether the task dependencies form a valid Directed Acyclic Graph (DAG) or contain a cycle.",
+        "difficulty": "hard",
+        "roles": ["data_engineer"],
+        "experience_levels": ["advanced"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Builds adjacency list and in-degree counts (Kahn's algorithm) or uses DFS with recursion stack",
+            "Identifies cycle if count of processed nodes != total tasks",
+            "Returns boolean True if valid DAG, False if cyclic",
+            "Handles disconnected components cleanly"
+        ],
+        "expected_concepts": ["Topological sorting (Kahn's algorithm)", "In-degree tracking", "Cycle detection in directed graphs", "Airflow DAG validation principles"],
+        "follow_up_enabled": False
+    },
+
+    # --- Backend Developer Coding ---
+    {
+        "question_id": "BE_CODE_01",
+        "stage": "coding",
+        "type": "coding",
+        "category": "HTTP & URL Parsing",
+        "skill": "Backend Fundamentals",
+        "topic": "Query Parameter Parser",
+        "question": "Write a Python function 'parse_query_string(url)' that extracts and parses the query parameters from a URL into a dictionary. How do you handle multiple values for the same key (e.g. 'filter=active&filter=pending')?",
+        "difficulty": "easy",
+        "roles": ["backend_developer"],
+        "experience_levels": ["beginner"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Isolates query portion after '?' cleanly",
+            "Splits on '&' and key-value pairs on '='",
+            "Handles URL percent-decoding where appropriate",
+            "Stores duplicate keys as lists rather than overwriting previous values"
+        ],
+        "expected_concepts": ["String parsing", "URL percent-decoding", "Multi-dict data structure", "Robust edge-case handling"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "BE_CODE_02",
+        "stage": "coding",
+        "type": "coding",
+        "category": "System Design Algorithms",
+        "skill": "Backend Algorithms",
+        "topic": "Token Bucket Rate Limiter",
+        "question": "Implement an in-memory 'TokenBucket' class in Python with methods 'allow_request(tokens=1)' that refills tokens at a specified rate per second up to a maximum burst capacity, returning True if allowed and False if rejected.",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["intermediate"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Tracks capacity, refill_rate, current tokens, and last_refill_timestamp",
+            "Calculates tokens to add based on elapsed time: (now - last_refill) * refill_rate",
+            "Caps tokens at capacity",
+            "Decrements tokens if available and updates timestamp"
+        ],
+        "expected_concepts": ["Token Bucket rate limiting algorithm", "Time difference tracking", "State management", "Burst handling"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "BE_CODE_03",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Data Structures & Caching",
+        "skill": "Data Structures",
+        "topic": "LRU Cache Implementation",
+        "question": "Implement a Least Recently Used (LRU) Cache in Python with 'get(key)' and 'put(key, value)' methods that operate in O(1) time complexity. Explain why combining a doubly-linked list with a hash map achieves this.",
+        "difficulty": "hard",
+        "roles": ["backend_developer"],
+        "experience_levels": ["advanced"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Hash map maps key -> Node for O(1) lookups",
+            "Doubly-linked list allows O(1) node removal and insertion to head",
+            "Moves accessed nodes to head on 'get' or 'put'",
+            "Evicts tail node when capacity is exceeded"
+        ],
+        "expected_concepts": ["Doubly-linked list node manipulation", "Hash map key indexing", "O(1) time complexity guarantee", "Eviction of least recently accessed item"],
+        "follow_up_enabled": False
+    },
+
+    # --- Data Analyst Coding ---
+    {
+        "question_id": "DA_CODE_01",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Data Cleaning",
+        "skill": "Python Analytics",
+        "topic": "Median Imputation",
+        "question": "Write a Python function 'impute_missing_median(numbers)' that takes a list of numbers containing None values and replaces each None with the median of the valid numbers in the list.",
+        "difficulty": "easy",
+        "roles": ["data_analyst"],
+        "experience_levels": ["beginner"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Filters out None values to isolate valid numerical entries",
+            "Sorts valid numbers to compute median correctly for both odd and even lengths",
+            "Replaces None values in the original list or returns a new imputed list",
+            "Handles edge case where all values are None"
+        ],
+        "expected_concepts": ["Filtering None values", "Median calculation (odd vs even)", "Imputation mechanics", "Edge case validation"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "DA_CODE_02",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Time Series Analysis",
+        "skill": "Python Analytics",
+        "topic": "Moving Average Calculation",
+        "question": "Write a Python function 'rolling_average(values, window_size)' that computes a simple moving average over a numerical list. Explain how your algorithm handles the initial boundary where fewer than window_size items exist.",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["intermediate"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Iterates through the list calculating sum of current window",
+            "Divides by actual window size or pads appropriately",
+            "Maintains O(N) running sum rather than slicing O(N*W)",
+            "Returns smoothed float values"
+        ],
+        "expected_concepts": ["Sliding window running sum", "Boundary padding / partial windows", "Algorithmic efficiency O(N)", "Time-series smoothing"],
+        "follow_up_enabled": False
+    },
+    {
+        "question_id": "DA_CODE_03",
+        "stage": "coding",
+        "type": "coding",
+        "category": "Cohort Analytics",
+        "skill": "Cohort Analysis",
+        "topic": "Cohort Retention Matrix",
+        "question": "Write a Python function 'cohort_retention(records)' where each record is a dict {'user_id': int, 'signup_month': int, 'active_month': int}. Compute and return a dictionary mapping each signup_month to retention percentages for subsequent months (Month 0, Month 1, Month 2).",
+        "difficulty": "hard",
+        "roles": ["data_analyst"],
+        "experience_levels": ["advanced"],
+        "is_coding": True,
+        "evaluation_type": "technical",
+        "evaluation_rubric": [
+            "Groups users by signup_month and counts base cohort size at Month 0",
+            "Tracks distinct active users at month_offset = (active_month - signup_month)",
+            "Calculates retention percentage: (active_users_at_offset / cohort_size) * 100",
+            "Returns structured cohort matrix dict"
+        ],
+        "expected_concepts": ["Cohort grouping by acquisition period", "Month offset calculation", "Distinct user counting per period", "Retention percentage calculation"],
+        "follow_up_enabled": False
+    },
+
+    # =========================================================================
+    # STAGE 6: PROJECT DISCUSSION (15 questions: 2 per role + 3 shared) - Stage limit: 2
+    # =========================================================================
+    # --- Web Developer Project Discussion ---
+    {
+        "question_id": "WEB_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Architecture",
+        "skill": "Web Development",
+        "topic": "Frontend Architecture & Responsive Design",
+        "question": "Walk me through a web application or frontend project you built. How did you structure your components, manage application state, and ensure the UI remained responsive across mobile and desktop devices?",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Clear description of project purpose, user interactions, and tech stack",
+            "Explains component hierarchy and state management strategy",
+            "Describes CSS styling approach (flexbox, grid, media queries) for multi-device responsiveness"
+        ],
+        "expected_concepts": ["Component decomposition", "State architecture", "Responsive layout", "User experience considerations"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "WEB_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Debugging",
+        "skill": "Web Development",
+        "topic": "Resolving Frontend Technical Hurdles",
+        "question": "In a web project you worked on, what was an unexpected layout, state management, or API integration challenge you faced, and what tools or debugging methods did you use to resolve it?",
+        "difficulty": "medium",
+        "roles": ["web_developer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Articulates a concrete technical problem clearly",
+            "Explains diagnostic steps using browser devtools, network tab, or console debugging",
+            "Explains the permanent architectural fix rather than a quick hack"
+        ],
+        "expected_concepts": ["Browser DevTools inspection", "Root-cause diagnosis", "State synchronization fix", "Lessons applied to future code"],
+        "follow_up_enabled": True
+    },
+
+    # --- AI Engineer Project Discussion ---
+    {
+        "question_id": "AI_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Architecture",
+        "skill": "AI Systems",
+        "topic": "AI Application Design & Context Retrieval",
+        "question": "Describe an AI or LLM application you developed or experimented with. How did you structure your prompts, context retrieval, or knowledge source, and what guided your choice of model or API?",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Outlines project objective, user workflow, and model selection rationale",
+            "Explains prompt templates and system instruction design",
+            "Describes retrieval or context injection mechanisms used to ground responses"
+        ],
+        "expected_concepts": ["Model selection trade-offs", "Prompt structure", "Context injection / RAG", "Output validation"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "AI_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Optimization",
+        "skill": "AI Systems",
+        "topic": "Handling Hallucinations & API Constraints",
+        "question": "When building with AI models in your project, how did you handle operational constraints such as API latency, token costs, rate limits, or unexpected model hallucinations?",
+        "difficulty": "medium",
+        "roles": ["ai_engineer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Identifies specific friction points (latency, hallucinations, rate limits)",
+            "Details solutions like streaming responses, prompt constraints, chunk optimization, or caching",
+            "Demonstrates realistic awareness of production LLM trade-offs"
+        ],
+        "expected_concepts": ["Latency reduction (streaming/caching)", "Hallucination mitigation", "Token budgeting", "Graceful API failure handling"],
+        "follow_up_enabled": True
+    },
+
+    # --- Machine Learning Engineer Project Discussion ---
+    {
+        "question_id": "ML_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Architecture",
+        "skill": "Machine Learning",
+        "topic": "End-to-End ML Pipeline Lifecycle",
+        "question": "Walk me through an end-to-end machine learning project you conducted. How did you formulate the problem, collect or clean the dataset, and select your baseline model architecture?",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Clear translation of real-world objective into ML formulation (classification, regression, etc.)",
+            "Explains data exploration, cleaning, and feature engineering steps",
+            "Explains baseline model selection and rationale for subsequent iterative experiments"
+        ],
+        "expected_concepts": ["Problem framing", "EDA and feature preparation", "Baseline selection", "Iterative experimentation"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "ML_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Validation",
+        "skill": "Machine Learning",
+        "topic": "Model Validation & Performance Verification",
+        "question": "In your machine learning project, how did you evaluate your model's real-world performance, guard against data leakage, and confirm that the model was ready for practical use?",
+        "difficulty": "medium",
+        "roles": ["ml_engineer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Explains validation strategy (cross-validation, holdout test split)",
+            "Describes metrics chosen aligned to the problem (F1, RMSE, ROC-AUC)",
+            "Discusses error analysis on misclassified examples to guide improvements"
+        ],
+        "expected_concepts": ["Holdout validation partition", "Metric selection aligned to goals", "Leakage prevention", "Error analysis and residual inspection"],
+        "follow_up_enabled": True
+    },
+
+    # --- Data Engineer Project Discussion ---
+    {
+        "question_id": "DE_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Architecture",
+        "skill": "Data Engineering",
+        "topic": "Pipeline Design & Storage Schema",
+        "question": "Describe a data pipeline, database schema, or ETL project you created. What was the origin and structure of the source data, and how did you transform and load it for downstream consumption?",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Explains data source (APIs, logs, CSVs, transactional DB) and ingestion frequency",
+            "Details schema design (relational or dimensional) and transformations applied",
+            "Clarifies how consumers (analysts, dashboards, applications) access the final loaded data"
+        ],
+        "expected_concepts": ["Source-to-target mapping", "ETL/ELT transformation steps", "Target schema design", "Downstream serving"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DE_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Reliability",
+        "skill": "Data Engineering",
+        "topic": "Data Quality & Pipeline Failure Recovery",
+        "question": "In your data engineering project, how did you handle messy data, unexpected schema changes, or pipeline crashes to ensure data integrity and avoid corrupting target tables?",
+        "difficulty": "medium",
+        "roles": ["data_engineer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Identifies specific edge cases encountered (missing timestamps, null IDs, datatype mismatches)",
+            "Explains validation gates and logging/alerting mechanisms",
+            "Describes retry logic, partition replacement, or transaction rollback to preserve target integrity"
+        ],
+        "expected_concepts": ["Data validation checkpoints", "Idempotent backfilling/retries", "Exception handling & alerting", "Data integrity preservation"],
+        "follow_up_enabled": True
+    },
+
+    # --- Backend Developer Project Discussion ---
+    {
+        "question_id": "BE_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Architecture",
+        "skill": "Backend Development",
+        "topic": "Backend Service & API Design",
+        "question": "Can you discuss a backend service, REST API, or server application you built? How did you design the database models, handle request validation, and structure your business logic?",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Explains API endpoints and request/response contracts",
+            "Describes database entity relationships (one-to-many, many-to-many) and schema choices",
+            "Details layer separation (controllers, services, repositories) for clean maintainability"
+        ],
+        "expected_concepts": ["Layered architecture (controller/service/repository)", "Schema relationship modeling", "Input validation & error formatting", "Security & authentication"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "BE_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Debugging",
+        "skill": "Backend Development",
+        "topic": "Solving Backend Concurrency or Query Bottlenecks",
+        "question": "In a backend project you built, what was the most challenging technical hurdle you faced—such as database query bottlenecks, authentication issues, or concurrency bugs—and how did you resolve it?",
+        "difficulty": "medium",
+        "roles": ["backend_developer"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Clearly defines the technical root-cause (e.g. N+1 query problem, unindexed foreign key, token expiration edge case)",
+            "Explains diagnostic tools used (EXPLAIN query plans, logging, profilers)",
+            "Outlines the refactor and verification tests ensuring no regressions"
+        ],
+        "expected_concepts": ["Database query profiling (EXPLAIN)", "N+1 query resolution", "Concurrency bug isolation", "Regression testing"],
+        "follow_up_enabled": True
+    },
+
+    # --- Data Analyst Project Discussion ---
+    {
+        "question_id": "DA_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Architecture",
+        "skill": "Data Analysis",
+        "topic": "Exploratory Analysis & Business Questions",
+        "question": "Walk me through an end-to-end data analysis or visualization project you conducted. What business or exploratory question were you investigating, and what dataset did you analyze?",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Explains the core business hypothesis or objective",
+            "Details dataset scope, source, and initial exploratory data analysis (EDA)",
+            "Explains analytical methods (segmentation, aggregation, trends) applied to answer the question"
+        ],
+        "expected_concepts": ["Business hypothesis framing", "Exploratory Data Analysis (EDA)", "Aggregation and segmentation", "Analytical rigor"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "DA_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Impact",
+        "skill": "Data Analysis",
+        "topic": "Communicating Insights & Stakeholder Impact",
+        "question": "What actionable insights or trends did you discover from your analysis project, and how did you select your visual charts to communicate those findings effectively to stakeholders?",
+        "difficulty": "medium",
+        "roles": ["data_analyst"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Communicates clear, actionable findings rather than just stating numbers",
+            "Explains chart choices tailored for quick audience comprehension",
+            "Describes the business impact or decision influenced by the findings"
+        ],
+        "expected_concepts": ["Actionable business recommendations", "Purposeful chart selection", "Stakeholder presentation", "Data-driven decision making"],
+        "follow_up_enabled": True
+    },
+
+    # --- Shared Project Discussion Questions ---
+    {
+        "question_id": "GEN_PROJ_01",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Project Evolution",
+        "skill": "System Design",
+        "topic": "Future Architectural Improvements",
+        "question": "If you had an additional month to continue developing this project, what major architectural improvement, feature, or optimization would you prioritize and why?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Identifies genuine system bottlenecks or missing architectural features",
+            "Articulates a clear roadmap prioritizing high-impact enhancements",
+            "Reflects technical maturity and vision"
+        ],
+        "expected_concepts": ["Technical debt identification", "Prioritization by impact", "Scalability roadmap"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "GEN_PROJ_02",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Quality Assurance",
+        "skill": "Testing",
+        "topic": "Testing & Verification Strategy",
+        "question": "How did you test your project and verify that your implementation was functioning correctly before presenting it or putting it into use?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Mentions unit tests, integration tests, or manual edge-case verification",
+            "Explains how expected outputs were validated against requirements",
+            "Focus on reliability and quality"
+        ],
+        "expected_concepts": ["Automated or manual testing strategy", "Edge-case verification", "Regression prevention"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "GEN_PROJ_03",
+        "stage": "project_discussion",
+        "type": "project",
+        "category": "Engineering Trade-offs",
+        "skill": "Engineering Judgment",
+        "topic": "Speed vs Technical Debt",
+        "question": "Describe the trade-offs you had to make during your project between delivering features quickly and maintaining clean, well-tested architecture. How did you balance them?",
+        "difficulty": "medium",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "project",
+        "evaluation_rubric": [
+            "Recognizes practical constraints in real-world development",
+            "Explains deliberate decisions on where shortcuts were safe and where rigor was required",
+            "Plan for addressing technical debt"
+        ],
+        "expected_concepts": ["Velocity vs maintainability trade-offs", "Conscious technical debt", "Documentation and refactoring"],
+        "follow_up_enabled": True
+    },
+
+    # =========================================================================
+    # STAGE 7: CLOSING (4 questions, shared across roles) - Stage limit: 2
+    # =========================================================================
+    {
+        "question_id": "CLS001",
+        "stage": "closing",
+        "type": "closing",
+        "category": "Career Vision",
+        "skill": "Career Planning",
+        "topic": "12-24 Month Technical Goals",
+        "question": "What professional and technical goals are you focusing on achieving over the next 12 to 24 months in your engineering or analytical career?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "closing",
+        "evaluation_rubric": [
+            "Clear forward-looking vision aligned with domain growth",
+            "Specific skills, architectures, or leadership capabilities target",
+            "Ambition balanced with pragmatic learning steps"
+        ],
+        "expected_concepts": ["Professional development goals", "Continuous learning plan", "Industry impact"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "CLS002",
+        "stage": "closing",
+        "type": "closing",
+        "category": "Candidate Inquiry",
+        "skill": "Communication",
+        "topic": "Questions for Interviewer",
+        "question": "What questions do you have for our engineering team regarding our tech stack, team workflow, or code review culture?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "closing",
+        "evaluation_rubric": [
+            "Asks thoughtful, informed questions about team practices and architecture",
+            "Demonstrates interest in collaborative culture and continuous improvement",
+            "Professional engagement"
+        ],
+        "expected_concepts": ["Informed inquiry", "Engineering culture interest", "Team collaboration"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "CLS003",
+        "stage": "closing",
+        "type": "closing",
+        "category": "Self-Reflection",
+        "skill": "Self-Awareness",
+        "topic": "Strengths & Growth Areas Reflection",
+        "question": "Reflecting on your responses throughout this interview session, which technical area do you feel most confident about, and which area are you eager to continue strengthening?",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "closing",
+        "evaluation_rubric": [
+            "Honest, self-aware assessment of performance",
+            "Highlights genuine technical strengths without arrogance",
+            "Identifies specific areas for active development"
+        ],
+        "expected_concepts": ["Constructive self-reflection", "Recognizing strengths", "Commitment to growth"],
+        "follow_up_enabled": True
+    },
+    {
+        "question_id": "CLS004",
+        "stage": "closing",
+        "type": "closing",
+        "category": "Industry Awareness",
+        "skill": "Continuous Learning",
+        "topic": "Staying Current with Tech",
+        "question": "How do you stay up-to-date with emerging tools, industry standards, and best practices in your field? Share a few trusted sources or communities you follow.",
+        "difficulty": "easy",
+        "roles": ["all"],
+        "experience_levels": ["beginner", "intermediate", "advanced"],
+        "is_coding": False,
+        "evaluation_type": "closing",
+        "evaluation_rubric": [
+            "Mentions specific reputable engineering blogs, papers, podcasts, or open-source repositories",
+            "Proactive habit of reading release notes and architecture articles",
+            "Lifelong learning mindset"
+        ],
+        "expected_concepts": ["Trusted technical publications", "Open-source community engagement", "Habitual knowledge updating"],
+        "follow_up_enabled": True
+    }
+]
+
+def generate():
+    target_path = os.path.join(os.path.dirname(__file__), "questions.json")
+    print(f"Total curated questions: {len(questions)}")
+    
+    # Validation checks
+    ids = set()
+    stage_counts = {}
+    role_tech_counts = {}
+    role_code_counts = {}
+
+    for q in questions:
+        qid = q["question_id"]
+        assert qid not in ids, f"Duplicate question ID: {qid}"
+        ids.add(qid)
+
+        stage = q["stage"]
+        stage_counts[stage] = stage_counts.get(stage, 0) + 1
+
+        for r in q.get("roles", []):
+            if stage == "technical":
+                role_tech_counts[r] = role_tech_counts.get(r, 0) + 1
+            elif stage == "coding":
+                role_code_counts[r] = role_code_counts.get(r, 0) + 1
+
+    print("Stage breakdown:", stage_counts)
+    print("Technical questions per role:", role_tech_counts)
+    print("Coding questions per role:", role_code_counts)
+
+    # Write out cleanly formatted JSON
+    with open(target_path, "w", encoding="utf-8") as f:
+        json.dump(questions, f, indent=2, ensure_ascii=False)
+    print(f"Successfully generated question bank to: {target_path}")
+
+if __name__ == "__main__":
+    generate()

@@ -1,131 +1,108 @@
+"""
+AI Evaluation Service for AI Mock Interview Evaluation System.
+Connects to Groq for qualitative assessment while relying on Python for deterministic score calculation.
+"""
+
 import os
 import json
-
+import re
+from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
-from google import genai
+from groq import Groq
+
+from evaluation_service import (
+    build_role_aware_evaluation_prompt,
+    calculate_deterministic_scores,
+)
 
 load_dotenv()
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+api_key = os.getenv("GROQ_API_KEY")
+
+# Gracefully initialize Groq client only if API key is present
+client = Groq(api_key=api_key) if api_key else None
 
 
-def analyze_interview(answers):
+def _clean_and_parse_llm_json(response_text: str) -> Dict[str, Any]:
+    """Extract and parse valid JSON from LLM output, handling markdown blocks if present."""
+    if not response_text:
+        raise ValueError("Groq returned an empty analysis response.")
 
-    prompt = f"""
-You are an AI mock interview evaluator.
-
-Analyze the candidate's complete interview responses.
-
-This is a PRACTICE interview, not a hiring or recruitment decision.
-
-Evaluate the candidate on:
-
-1. Communication
-2. Answer relevance
-3. Answer structure
-4. Specificity
-5. Behavioral responses
-6. Technical understanding
-7. Project discussion
-8. Overall improvement areas
-
-Important:
-- Do not judge personality.
-- Do not make hiring decisions.
-- Do not invent information.
-- Base your analysis only on the candidate's answers.
-- Give constructive and practical feedback.
-- Do not evaluate every answer independently as if there is one correct answer.
-- Behavioral questions should be evaluated for clarity, specificity and reflection.
-- Technical answers should be evaluated for conceptual accuracy.
-
-Return ONLY valid JSON.
-
-Required JSON format:
-
-{{
-    "overall_summary": "Short summary of the interview",
-
-    "communication": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "relevance": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "structure": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "specificity": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "behavioral": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "technical": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "project_discussion": {{
-        "score": 0,
-        "feedback": "..."
-    }},
-
-    "strengths": [
-        "...",
-        "...",
-        "..."
-    ],
-
-    "improvements": [
-        "...",
-        "...",
-        "..."
-    ],
-
-    "final_feedback": [
-        "...",
-        "...",
-        "..."
-    ]
-}}
-
-Scores must be between 0 and 10.
-
-Candidate interview responses:
-
-{json.dumps(answers, indent=2)}
-"""
-
-    interaction = client.interactions.create(
-        model="gemini-3.6-flash",
-        input=prompt
-    )
-
-    response_text = interaction.output_text.strip()
+    text = response_text.strip()
+    if text.startswith("```json"):
+        text = text[7:]
+    elif text.startswith("```"):
+        text = text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+    text = text.strip()
 
     try:
-        return json.loads(response_text)
-
+        return json.loads(text)
     except json.JSONDecodeError:
+        # Fallback: Find outermost JSON brackets
+        match = re.search(r"\{[\s\S]*\}", text)
+        if match:
+            try:
+                return json.loads(match.group(0))
+            except json.JSONDecodeError:
+                pass
+        raise ValueError("Failed to parse valid JSON evaluation output from Groq.")
 
-        if response_text.startswith("```"):
-            response_text = response_text.replace(
-                "```json", ""
-            ).replace(
-                "```", ""
-            ).strip()
 
-        return json.loads(response_text)
+def analyze_interview(
+    answers: List[Dict[str, Any]],
+    role: str = "Web Developer",
+    experience_level: str = "Beginner",
+    role_id: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Perform role-aware, evidence-based final interview evaluation.
+    Evaluates each response against its own question rubric and expected concepts.
+    Uses Python for deterministic score calculation and bounds enforcement.
+    """
+    if not client:
+        raise ValueError("GROQ_API_KEY is missing or invalid in environment.")
+
+    resolved_role_id = role_id or role.lower().replace(" ", "_")
+    resolved_role_title = role
+
+    prompt = build_role_aware_evaluation_prompt(
+        answers=answers,
+        role_id=resolved_role_id,
+        role_title=resolved_role_title,
+        experience_level=experience_level
+    )
+
+    response = client.chat.completions.create(
+        model="openai/gpt-oss-20b",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are a principal technical interviewer evaluating a mock interview practice session. "
+                    "You return strictly valid, objective JSON without markdown formatting."
+                )
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.2,
+        max_completion_tokens=3500,
+        response_format={"type": "json_object"}
+    )
+
+    response_text = response.choices[0].message.content
+    raw_result = _clean_and_parse_llm_json(response_text)
+
+    # Deterministic score validation and aggregation performed strictly in Python
+    validated_analysis = calculate_deterministic_scores(raw_result)
+
+    # Attach canonical metadata
+    validated_analysis["role"] = resolved_role_id
+    validated_analysis["role_title"] = resolved_role_title
+    validated_analysis["experience_level"] = experience_level
+
+    return validated_analysis

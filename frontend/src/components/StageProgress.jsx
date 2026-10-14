@@ -1,9 +1,7 @@
-import { formatStage } from "../utils/formatStage"
+import { Check } from "lucide-react";
+import { formatStage } from "../utils/formatStage";
 
-function StageProgress({
-  currentStage
-}) {
-
+function StageProgress({ currentStage }) {
   const stages = [
     "introduction",
     "background",
@@ -11,48 +9,50 @@ function StageProgress({
     "technical",
     "coding",
     "project_discussion",
-    "closing"
-  ]
+    "closing",
+  ];
 
-  const currentIndex =
-    stages.indexOf(currentStage)
+  const currentIndex = stages.indexOf(currentStage);
 
   return (
-    <div className="stageTracker">
+    <nav aria-label="Interview stages progress" className="stageTrackerContainer">
+      <div className="stageTrackerHeader">
+        <span className="stageTrackerTitle">INTERVIEW STAGES</span>
+        <span className="stageTrackerBadge">
+          Stage {currentIndex >= 0 ? currentIndex + 1 : 1} of {stages.length}
+        </span>
+      </div>
 
-      {stages.map(
-        (stage, index) => (
+      <ol className="stageTracker">
+        {stages.map((stage, index) => {
+          const isCompleted = currentIndex > -1 && index < currentIndex;
+          const isActive = index === currentIndex;
 
-          <div
-            key={stage}
-            className={
-              index < currentIndex
-                ? "stageItem completed"
-                : index === currentIndex
-                ? "stageItem active"
-                : "stageItem"
-            }
-          >
+          let statusClass = "stageItem";
+          if (isCompleted) statusClass += " completed";
+          if (isActive) statusClass += " active";
 
-            <div className="stageDot">
+          return (
+            <li
+              key={stage}
+              className={statusClass}
+              aria-current={isActive ? "step" : undefined}
+            >
+              <div className="stageDot" aria-hidden="true">
+                {isCompleted ? (
+                  <Check size={14} strokeWidth={2.8} />
+                ) : (
+                  <span>{index + 1}</span>
+                )}
+              </div>
 
-              {index < currentIndex
-                ? "✓"
-                : index + 1}
-
-            </div>
-
-            <span>
-              {formatStage(stage)}
-            </span>
-
-          </div>
-
-        )
-      )}
-
-    </div>
-  )
+              <span className="stageLabel">{formatStage(stage)}</span>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
 }
 
-export default StageProgress
+export default StageProgress;
